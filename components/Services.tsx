@@ -1,131 +1,128 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { QrCode, Store, Globe, Share2 } from "lucide-react";
+import Link from "next/link";
+import { useLanguage } from "@/components/LanguageProvider";
 
-interface ServiceItem {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  accentClass: string;
-}
-
-const SERVICES: ServiceItem[] = [
+const services = [
   {
-    icon: QrCode,
-    title: "Reseñas con NFC y QR",
-    description:
-      "Tarjetas y placas para que tus clientes dejen su reseña de Google en segundos.",
-    accentClass: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white",
+    badge: "services.badge1",
+    title: "services.title1",
+    description: "services.description1",
+    features: ["services.feature1a", "services.feature1b", "services.feature1c"],
+    image: "services.serviceImage1",
+    price: "services.price1",
   },
   {
-    icon: Store,
-    title: "Perfil de Google Business",
-    description:
-      "Lo optimizamos para que más gente te encuentre y te contacte.",
-    accentClass: "bg-highlight/15 text-primary group-hover:bg-primary group-hover:text-white",
+    badge: "services.badge2",
+    title: "services.title2",
+    description: "services.description2",
+    features: ["services.feature2a", "services.feature2b", "services.feature2c"],
+    image: "services.serviceImage2",
+    price: "services.price2",
   },
   {
-    icon: Globe,
-    title: "Páginas web",
-    description:
-      "Sitios rápidos, claros y hechos a la medida para tu negocio.",
-    accentClass: "bg-accent/10 text-accent group-hover:bg-accent group-hover:text-white",
+    badge: "services.badge3",
+    title: "services.title3",
+    description: "services.description3",
+    features: ["services.feature3a", "services.feature3b", "services.feature3c"],
+    image: "services.serviceImage3",
+    price: "services.price3",
   },
   {
-    icon: Share2,
-    title: "Redes sociales",
-    description:
-      "Contenido y diseño constantes para mantener tu marca activa.",
-    accentClass: "bg-highlight/15 text-primary group-hover:bg-primary group-hover:text-white",
+    badge: "services.badge4",
+    title: "services.title4",
+    description: "services.description4",
+    features: ["services.feature4a", "services.feature4b", "services.feature4c"],
+    image: "services.serviceImage4",
+    price: "services.price4",
   },
-];
+  {
+    badge: "services.badge5",
+    title: "services.title5",
+    description: "services.description5",
+    features: ["services.feature5a", "services.feature5b", "services.feature5c"],
+    image: "services.serviceImage5",
+    price: "services.price5",
+  },
+] as const;
 
 export default function Services() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px",
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
+  const { t } = useLanguage();
 
   return (
-    <section
-      id="servicios"
-      ref={sectionRef}
-      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-surface/50"
-    >
-      <div className="max-w-7xl mx-auto">
-        {/* Encabezado de la sección */}
-        <div
-          className={`max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-16 sm:mb-20 transition-all duration-700 ease-out ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
-          }`}
-        >
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-text-main leading-tight">
-            Lo que hacemos por tu negocio
-          </h2>
-          <p className="text-base sm:text-lg text-text-muted font-normal leading-relaxed">
-            Soluciones prácticas para ganar visibilidad local y fortalecer la presencia digital de tu empresa.
+    <section id="servicios" className="bg-white px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto max-w-7xl">
+        <div className="mx-auto mb-14 max-w-3xl text-center">
+          <span className="inline-block rounded-full border border-indigo-200 bg-indigo-50 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-indigo-600">
+            {t("services.eyebrow")}
+          </span>
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            {t("services.title")}
+          </h1>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+            {t("services.intro")}
           </p>
         </div>
 
-        {/* Cuadrícula responsiva: 1 col celular, 2 col tableta, 4 col escritorio */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 lg:gap-8">
-          {SERVICES.map((service, index) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.title}
-                style={{
-                  transitionDelay: isVisible ? `${index * 120}ms` : "0ms",
-                }}
-                className={`group p-6 sm:p-7 rounded-2xl bg-background border border-border shadow-xs hover:border-primary/40 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between ${
-                  isVisible
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-8"
-                }`}
-              >
-                <div>
-                  {/* Icono con fondo suave de baja opacidad (celeste / lila como decoración) */}
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 transition-colors duration-300 ${service.accentClass}`}
-                  >
-                    <Icon className="w-6 h-6 stroke-[1.8]" />
-                  </div>
-
-                  {/* Título de la tarjeta (peso 700, texto principal) */}
-                  <h3 className="text-lg font-bold text-text-main tracking-tight mb-2">
-                    {service.title}
-                  </h3>
-
-                  {/* Descripción de 2 líneas (peso 400, texto secundario) */}
-                  <p className="text-sm text-text-muted font-normal leading-relaxed">
-                    {service.description}
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {services.map((service, index) => (
+            <article
+              key={service.title}
+              className="animate-fade-in-up flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-xl hover:shadow-slate-900/5"
+              style={{ animationDelay: `${index * 90}ms` }}
+            >
+              <div className="flex aspect-[16/9] flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-5 text-center">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-indigo-100 bg-white text-xl text-indigo-500 shadow-sm" aria-hidden="true">
+                  +
+                </span>
+                <p className="mt-3 text-sm font-semibold text-slate-600">
+                  {t("services.visual")}
+                </p>
+                <code className="mt-2 rounded bg-white/80 px-2 py-1 text-[11px] text-slate-500">
+                  {t("services.visualPath")}{t(service.image)}
+                </code>
+              </div>
+              <div className="flex flex-1 flex-col p-6 sm:p-7">
+                <span className="self-start rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-700">
+                  {t(service.badge)}
+                </span>
+                <h2 className="mt-4 text-xl font-extrabold text-slate-900 sm:text-2xl">
+                  {t(service.title)}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  {t(service.description)}
+                </p>
+                <ul className="mt-5 flex-1 space-y-2.5">
+                  {service.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5 text-sm font-medium text-slate-700">
+                      <svg
+                        className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                        aria-hidden="true"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>{t(feature)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 border-t border-slate-200 pt-4">
+                  <p className="mb-3 text-xs font-semibold text-slate-500">
+                    {t(service.price)}
                   </p>
+                  <Link
+                    href="/contacto"
+                    className="inline-flex items-center gap-2 text-sm font-extrabold text-indigo-600 transition-colors hover:text-indigo-800"
+                  >
+                    {t("services.quote")} <span aria-hidden="true">→</span>
+                  </Link>
                 </div>
               </div>
-            );
-          })}
+            </article>
+          ))}
         </div>
       </div>
     </section>

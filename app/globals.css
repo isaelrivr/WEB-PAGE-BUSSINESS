@@ -4,43 +4,52 @@
   --primary: #4F46E5;
   --accent: #0EA5E9;
   --highlight: #A78BFA;
-  --background: #FFFFFF;
-  --text-main: #111827;
-  --text-muted: #6B7280;
-  --surface: #F9FAFB;
-  --border: #E5E7EB;
+  --background: #ffffff;
+  --text-main: #0F172A;
+  --text-muted: #475569;
+  --surface: #F8FAFC;
+  --border: #E2E8F0;
 }
 
 @theme {
   --color-primary: #4F46E5;
   --color-accent: #0EA5E9;
   --color-highlight: #A78BFA;
-  --color-background: #FFFFFF;
-  --color-text-main: #111827;
-  --color-text-muted: #6B7280;
-  --color-surface: #F9FAFB;
-  --color-border: #E5E7EB;
+  --color-background: #ffffff;
+  --color-text-main: #0F172A;
+  --color-text-muted: #475569;
+  --color-surface: #F8FAFC;
+  --color-border: #E2E8F0;
 
   --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-body {
-  background-color: var(--background);
-  color: var(--text-main);
-  font-family: var(--font-sans);
+/* En Tailwind v4 los estilos de etiquetas DEBEN ir en @layer base para no bloquear clases como text-white */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--background);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  color: var(--text-main);
+/* Cuadrícula sutil para fondos claros */
+.bg-holos-light-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
 }
 
-p {
-  font-weight: 400;
-  color: var(--text-muted);
-}
-
-/* Animación sutil de entrada (fade y subida suave) */
+/* Animaciones suaves */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -52,8 +61,31 @@ p {
   }
 }
 
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulseRadar {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  70% { transform: scale(1.65); opacity: 0; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
 .animate-fade-in-up {
   animation: fadeInUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-page-in > * {
+  animation: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-float {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-radar {
+  animation: pulseRadar 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .animation-delay-150 {
@@ -65,9 +97,11 @@ p {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
+  .animate-fade-in-up,
+  .animate-page-in > *,
+  .animate-float,
+  .animate-radar {
     animation: none !important;
     transform: none !important;
   }
 }
-

@@ -18,7 +18,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contenido por agregar
+
+- **Casos reales:** agrega imágenes autorizadas en `public/images/casos/caso-01.webp`, `caso-02.webp` y `caso-03.webp`. Actualiza `components/ProjectShowcase.tsx` para mostrar cada archivo y reemplaza los textos de plantilla solo con proyectos reales.
+- **Imágenes de páginas:** agrega las imágenes de servicios en `public/images/servicios/` con los nombres que muestra cada tarjeta; la foto del equipo en `public/images/nosotros/equipo-holos.webp`; y la imagen de contacto en `public/images/contacto/asesoria-holos.webp`. Sustituye los marcadores visuales por `<Image>` de `next/image` en los componentes correspondientes.
+- **Video de demostración:** agrega el video optimizado en `public/videos/demo-nfc.mp4` y actualiza `components/VideoShowcase.tsx` para mostrar el reproductor. La sección actual es únicamente una plantilla.
+- **WhatsApp:** copia `.env.example` a `.env.local` y asigna `NEXT_PUBLIC_WHATSAPP_NUMBER` al número del negocio con clave de país, solo dígitos. Para México, usa `52` seguido del número nacional de 10 dígitos. Al configurar la variable, el botón flotante abre el chat; mientras tanto, dirige al formulario de contacto.
+- **Idiomas:** el selector del encabezado cambia el contenido entre español e inglés mientras navegas. Los archivos de imagen usan las mismas rutas en ambos idiomas.
+
+La página también incluye preguntas frecuentes y una sección de cobertura para la Comarca Lagunera. Revisa y ajusta las localidades y respuestas si cambian las condiciones de servicio.
 
 ## Learn More
 
