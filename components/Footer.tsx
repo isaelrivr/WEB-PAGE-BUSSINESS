@@ -58,7 +58,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="#contacto"
+                  href="/contacto"
                   className="text-text-muted hover:text-text-main transition-colors"
                 >
                   Contacto
@@ -113,12 +113,20 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Separador y parte inferior */}
+        {/* Separador y parte inferior con enlace a Aviso de privacidad */}
         <div className="mt-14 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted">
           <p>© 2025 Agencia PyME. Todos los derechos reservados.</p>
-          <p className="text-text-muted">
-            Enfocados en el crecimiento real de los negocios pequeños.
-          </p>
+          <div className="flex items-center gap-6">
+            <Link
+              href="/privacidad"
+              className="hover:text-text-main transition-colors underline-offset-4 hover:underline"
+            >
+              Aviso de privacidad
+            </Link>
+            <p className="text-text-muted">
+              Enfocados en el crecimiento real de los negocios pequeños.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
