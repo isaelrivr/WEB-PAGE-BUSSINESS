@@ -1,21 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
+  --primary: #4F46E5;
+  --accent: #0EA5E9;
+  --highlight: #A78BFA;
+  --background: #FFFFFF;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --surface: #F9FAFB;
+  --border: #E5E7EB;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-primary: #4F46E5;
+  --color-accent: #0EA5E9;
+  --color-highlight: #A78BFA;
+  --color-background: #FFFFFF;
+  --color-text-main: #111827;
+  --color-text-muted: #6B7280;
+  --color-surface: #F9FAFB;
+  --color-border: #E5E7EB;
+
+  --font-sans: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--background);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+p {
+  font-weight: 400;
+  color: var(--text-muted);
 }
 
 /* Animación sutil de entrada (fade y subida suave) */

@@ -15,30 +15,31 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Enlace directo a WhatsApp configurado para atención en México
-  const whatsappUrl = "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio";
+  const whatsappUrl =
+    "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio";
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-md border-b border-zinc-200/80 transition-all duration-300">
-      <nav 
-        aria-label="Navegación principal" 
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/85 backdrop-blur-md border-b border-border transition-all duration-300">
+      <nav
+        aria-label="Navegación principal"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between"
       >
         {/* Logo provisional */}
-        <Link 
-          href="/" 
-          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 rounded-lg p-1"
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-1"
         >
-          <div className="w-10 h-10 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-lg tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105">
+          <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105">
             AP
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-semibold text-zinc-900 tracking-tight leading-tight flex items-center gap-1.5">
+            <span className="text-base font-bold text-text-main tracking-tight leading-tight flex items-center gap-1.5">
               Agencia PyME
-              <span className="text-[10px] font-normal uppercase tracking-wider px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-500 border border-zinc-200">
+              <span className="text-[10px] font-normal uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface text-text-muted border border-border">
                 Logo Provisional
               </span>
             </span>
-            <span className="text-xs text-zinc-500 font-normal">
+            <span className="text-xs text-text-muted font-normal">
               Estrategia & Crecimiento Local
             </span>
           </div>
@@ -50,20 +51,20 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-zinc-600 hover:text-zinc-950 transition-colors duration-200 py-1"
+              className="text-sm font-medium text-text-muted hover:text-text-main transition-colors duration-200 py-1"
             >
               {link.name}
             </Link>
           ))}
         </div>
 
-        {/* CTA Escritorio: Escríbenos por WhatsApp */}
+        {/* CTA Escritorio: Escríbenos por WhatsApp (Botón principal: índigo con texto blanco) */}
         <div className="hidden md:flex items-center">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium text-emerald-800 bg-emerald-50 border border-emerald-200/80 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all duration-200 shadow-sm active:scale-95"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200 shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Escríbenos por WhatsApp (abre en nueva pestaña)"
           >
             <MessageCircle className="w-4 h-4 fill-current" />
@@ -75,7 +76,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg text-zinc-700 hover:text-zinc-950 hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+          className="md:hidden p-2 rounded-lg text-text-main hover:bg-surface focus:outline-none focus:ring-2 focus:ring-primary"
           aria-expanded={mobileMenuOpen}
           aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú de navegación"}
         >
@@ -85,26 +86,26 @@ export default function Navbar() {
 
       {/* Menú móvil desplegable */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-zinc-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden border-b border-border bg-background px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-200">
           <div className="flex flex-col space-y-3">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-zinc-800 hover:text-zinc-950 hover:bg-zinc-50 px-3 py-2 rounded-md transition-colors"
+                className="text-base font-medium text-text-main hover:bg-surface px-3 py-2 rounded-md transition-colors"
               >
                 {link.name}
               </Link>
             ))}
 
-            <div className="pt-3 border-t border-zinc-100">
+            <div className="pt-3 border-t border-border">
               <a
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-base font-medium text-white bg-primary hover:bg-primary/90 transition-colors shadow-sm"
               >
                 <MessageCircle className="w-5 h-5 fill-current" />
                 <span>Escríbenos por WhatsApp</span>

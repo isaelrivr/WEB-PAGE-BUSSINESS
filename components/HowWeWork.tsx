@@ -62,21 +62,19 @@ export default function HowWeWork() {
     <section
       id="como-trabajamos"
       ref={sectionRef}
-      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-zinc-200/80 bg-white"
+      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-background"
     >
       <div className="max-w-6xl mx-auto">
         {/* Encabezado */}
         <div
           className={`max-w-2xl mx-auto text-center space-y-3 sm:space-y-4 mb-16 sm:mb-20 transition-all duration-700 ease-out ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-zinc-900 leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-text-main leading-tight">
             Así trabajamos contigo
           </h2>
-          <p className="text-base sm:text-lg text-zinc-600 font-normal leading-relaxed">
+          <p className="text-base sm:text-lg text-text-muted font-normal leading-relaxed">
             Un método directo, transparente y enfocado en que tu negocio obtenga resultados paso a paso.
           </p>
         </div>
@@ -93,7 +91,7 @@ export default function HowWeWork() {
                       ? `${(index + 1) * 180}ms`
                       : "0ms",
                   }}
-                  className={`relative z-10 flex-1 p-7 sm:p-8 rounded-2xl bg-zinc-50/70 border border-zinc-200/80 hover:border-zinc-300 hover:shadow-xs transition-all duration-700 ease-out flex flex-col justify-between ${
+                  className={`relative z-10 flex-1 p-7 sm:p-8 rounded-2xl bg-surface border border-border hover:border-primary/40 hover:shadow-xs transition-all duration-700 ease-out flex flex-col justify-between ${
                     isVisible
                       ? "opacity-100 translate-y-0"
                       : "opacity-0 translate-y-8"
@@ -102,40 +100,40 @@ export default function HowWeWork() {
                   <div>
                     {/* Número distintivo */}
                     <div className="flex items-center justify-between mb-6">
-                      <span className="w-12 h-12 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-base tracking-wider shadow-xs">
+                      <span className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-base tracking-wider shadow-xs">
                         {step.number}
                       </span>
-                      <span className="text-xs uppercase font-medium tracking-wider text-zinc-400">
+                      <span className="text-xs uppercase font-semibold tracking-wider text-text-muted">
                         Paso {index + 1}
                       </span>
                     </div>
 
-                    {/* Título del paso */}
-                    <h3 className="text-xl font-semibold text-zinc-900 tracking-tight mb-3">
+                    {/* Título del paso (peso 700, texto principal) */}
+                    <h3 className="text-xl font-bold text-text-main tracking-tight mb-3">
                       {step.title}
                     </h3>
 
-                    {/* Descripción */}
-                    <p className="text-sm sm:text-base text-zinc-600 leading-relaxed font-normal">
+                    {/* Descripción (peso 400, texto secundario) */}
+                    <p className="text-sm sm:text-base text-text-muted leading-relaxed font-normal">
                       {step.description}
                     </p>
                   </div>
                 </div>
 
-                {/* Conector visual entre pasos */}
+                {/* Conector visual entre pasos (celeste decorativo) */}
                 {index < STEPS.length - 1 && (
                   <>
                     {/* Flecha horizontal en escritorio */}
-                    <div className="hidden md:flex absolute top-1/2 -right-3.5 lg:-right-4.5 -translate-y-1/2 z-20 text-zinc-400">
-                      <div className="w-7 h-7 rounded-full bg-white border border-zinc-200 shadow-xs flex items-center justify-center">
-                        <ArrowRight className="w-3.5 h-3.5 text-zinc-500" />
+                    <div className="hidden md:flex absolute top-1/2 -right-3.5 lg:-right-4.5 -translate-y-1/2 z-20">
+                      <div className="w-7 h-7 rounded-full bg-background border border-border shadow-xs flex items-center justify-center">
+                        <ArrowRight className="w-3.5 h-3.5 text-accent" />
                       </div>
                     </div>
 
                     {/* Flecha vertical en celular */}
-                    <div className="md:hidden flex items-center justify-center my-3 text-zinc-400">
-                      <div className="w-7 h-7 rounded-full bg-zinc-100 border border-zinc-200/80 flex items-center justify-center">
-                        <ArrowDown className="w-3.5 h-3.5 text-zinc-500" />
+                    <div className="md:hidden flex items-center justify-center my-3">
+                      <div className="w-7 h-7 rounded-full bg-surface border border-border flex items-center justify-center">
+                        <ArrowDown className="w-3.5 h-3.5 text-accent" />
                       </div>
                     </div>
                   </>
@@ -145,22 +143,20 @@ export default function HowWeWork() {
           </div>
         </div>
 
-        {/* Botón final para agendar asesoría gratuita */}
+        {/* Botón final para agendar asesoría gratuita (Botón principal: índigo con texto blanco) */}
         <div
           style={{
             transitionDelay: isVisible ? "700ms" : "0ms",
           }}
           className={`mt-16 sm:mt-20 text-center transition-all duration-700 ease-out ${
-            isVisible
-              ? "opacity-100 translate-y-0"
-              : "opacity-0 translate-y-6"
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-base font-medium text-white bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-base font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Agenda una asesoría gratis por WhatsApp (abre en una nueva pestaña)"
           >
             <MessageCircle className="w-5 h-5 fill-current" />
