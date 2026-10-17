@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contacto | Agencia PyME",
+  title: "Contacto | Holos",
   description:
-    "Cuéntanos sobre tu negocio. Te ayudamos a potenciar tus reseñas en Google Maps, tus redes sociales y tu página web.",
+    "Cuéntanos sobre tu negocio. En Holos te ayudamos a potenciar tus reseñas en Google Maps, tus redes sociales y tu página web.",
 };
 
 export default function ContactPage() {

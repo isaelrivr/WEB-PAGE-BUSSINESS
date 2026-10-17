@@ -12,9 +12,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Agencia PyME | Reseñas de Google, Redes Sociales y Páginas Web",
+  title: "Holos | Reseñas, redes y páginas web para negocios locales",
   description:
-    "Especialistas en impulsar negocios locales y pequeñas empresas mediante la optimización de reseñas en Google Maps, gestión de redes sociales y diseño web profesional.",
+    "Ayudamos a negocios locales a crecer y destacar con optimización de reseñas en Google Maps, gestión de redes sociales y páginas web profesionales.",
 };
 
 export default function RootLayout({

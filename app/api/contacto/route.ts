@@ -83,8 +83,8 @@ export async function POST(request: Request) {
     // Ejemplo con Resend:
     // const resendApiKey = process.env.RESEND_API_KEY;
     // await resend.emails.send({
-    //   from: "Agencia PyME <notificaciones@tu-dominio.com>",
-    //   to: [process.env.CONTACT_RECEIVER_EMAIL || "contacto@agenciapyme.mx"],
+    //   from: "Holos <notificaciones@tu-dominio.com>",
+    //   to: [process.env.CONTACT_RECEIVER_EMAIL || "contacto@holos.mx"],
     //   subject: `Nuevo contacto: ${negocio} (${servicio})`,
     //   text: `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefono}\nMensaje:\n${mensaje}`,
     // });

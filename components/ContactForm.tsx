@@ -9,7 +9,7 @@ export const CONTACT_INFO = {
   whatsappDisplay: "+52 (000) 000-0000",
   whatsappUrl:
     "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio",
-  email: "contacto@agenciapyme.mx",
+  email: "contacto@holos.mx",
 };
 
 const SERVICE_OPTIONS = [

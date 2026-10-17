@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MessageCircle, MapPin } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
   const whatsappUrl =
@@ -9,19 +10,11 @@ export default function Footer() {
     <footer className="bg-surface border-t border-border text-text-muted mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          {/* Columna 1: Identidad provisional */}
+          {/* Columna 1: Identidad */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-base tracking-wider">
-                AP
-              </div>
-              <div className="flex flex-col">
-                <span className="text-base font-bold text-text-main tracking-tight leading-tight">
-                  Agencia PyME
-                </span>
-                <span className="text-xs text-text-muted">Logo Provisional</span>
-              </div>
-            </div>
+            <Link href="/" className="inline-block" aria-label="Holos - Inicio">
+              <Logo className="text-2xl" />
+            </Link>
             <p className="text-sm text-text-muted leading-relaxed max-w-sm">
               Impulsamos a negocios pequeños y locales con soluciones prácticas:
               posicionamiento con reseñas de Google, gestión de redes sociales y
@@ -115,7 +108,7 @@ export default function Footer() {
 
         {/* Separador y parte inferior con enlace a Aviso de privacidad */}
         <div className="mt-14 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-text-muted">
-          <p>© 2025 Agencia PyME. Todos los derechos reservados.</p>
+          <p>© 2026 Holos. Todos los derechos reservados.</p>
           <div className="flex items-center gap-6">
             <Link
               href="/privacidad"

@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowLeft, Shield } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Aviso de Privacidad | Agencia PyME",
-  description: "Aviso de privacidad y tratamiento de datos personales.",
+  title: "Aviso de Privacidad | Holos",
+  description: "Aviso de privacidad y tratamiento de datos personales de Holos.",
 };
 
 export default function PrivacyPage() {
@@ -38,7 +38,7 @@ export default function PrivacyPage() {
               1. Identidad y responsabilidad
             </h2>
             <p>
-              Agencia PyME (identidad provisional) es responsable del uso y protección de los datos personales que nos proporciones a través de nuestro sitio web y canales de mensajería.
+              Holos es responsable del uso y protección de los datos personales que nos proporciones a través de nuestro sitio web y canales de mensajería.
             </p>
           </section>
 

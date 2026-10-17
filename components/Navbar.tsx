@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { MessageCircle, Menu, X, ArrowUpRight } from "lucide-react";
+import Logo from "@/components/Logo";
 
 const NAV_LINKS = [
   { name: "Inicio", href: "/" },
@@ -24,25 +25,13 @@ export default function Navbar() {
         aria-label="Navegación principal"
         className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between"
       >
-        {/* Logo provisional */}
+        {/* Logo Holos */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg p-1"
+          className="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg py-1 px-1.5"
+          aria-label="Holos - Inicio"
         >
-          <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-lg tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105">
-            AP
-          </div>
-          <div className="flex flex-col">
-            <span className="text-base font-bold text-text-main tracking-tight leading-tight flex items-center gap-1.5">
-              Agencia PyME
-              <span className="text-[10px] font-normal uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface text-text-muted border border-border">
-                Logo Provisional
-              </span>
-            </span>
-            <span className="text-xs text-text-muted font-normal">
-              Estrategia & Crecimiento Local
-            </span>
-          </div>
+          <Logo className="text-2xl transition-transform duration-200 group-hover:scale-105" />
         </Link>
 
         {/* Enlaces de escritorio */}
