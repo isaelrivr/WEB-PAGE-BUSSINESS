@@ -12,9 +12,39 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Holos | Reseñas, redes y páginas web para negocios locales",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://holos.mx"),
+  title: {
+    default: "Holos | Reseñas, redes y páginas web para negocios locales",
+    template: "%s | Holos",
+  },
   description:
     "Ayudamos a negocios locales a crecer y destacar con optimización de reseñas en Google Maps, gestión de redes sociales y páginas web profesionales.",
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    url: "https://holos.mx",
+    siteName: "Holos",
+    title: "Holos | Reseñas, redes y páginas web para negocios locales",
+    description:
+      "Ayudamos a negocios locales a crecer y destacar con optimización de reseñas en Google Maps, gestión de redes sociales y páginas web profesionales.",
+    // =========================================================================
+    // IMAGEN DE VISTA PREVIA OPEN GRAPH:
+    // Agrega el archivo 'og-image.jpg' (1200x630 px) en la carpeta public/
+    // y descomenta la siguiente línea:
+    // images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Holos - Soluciones digitales para negocios locales" }],
+    // =========================================================================
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Holos | Reseñas, redes y páginas web para negocios locales",
+    description:
+      "Ayudamos a negocios locales a crecer y destacar con optimización de reseñas en Google Maps, gestión de redes sociales y páginas web profesionales.",
+    // =========================================================================
+    // IMAGEN DE VISTA PREVIA TWITTER CARD:
+    // Descomenta la siguiente línea al agregar la imagen en public/og-image.jpg:
+    // images: ["/og-image.jpg"],
+    // =========================================================================
+  },
 };
 
 export default function RootLayout({

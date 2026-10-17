@@ -2,9 +2,32 @@ import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Contacto | Holos",
+  title: "Contacto | Asesoría digital para tu negocio local",
   description:
-    "Cuéntanos sobre tu negocio. En Holos te ayudamos a potenciar tus reseñas en Google Maps, tus redes sociales y tu página web.",
+    "Ponte en contacto con el equipo de Holos. Cuéntanos sobre tu negocio y recibe asesoría personalizada para mejorar tus reseñas de Google, redes sociales y página web.",
+  openGraph: {
+    title: "Contacto | Asesoría digital para tu negocio local - Holos",
+    description:
+      "Ponte en contacto con el equipo de Holos. Cuéntanos sobre tu negocio y recibe asesoría personalizada para mejorar tus reseñas de Google, redes sociales y página web.",
+    url: "https://holos.mx/contacto",
+    type: "website",
+    // =========================================================================
+    // IMAGEN DE VISTA PREVIA OPEN GRAPH (CONTACTO):
+    // Descomenta al colocar la imagen en public/og-contacto.jpg o public/og-image.jpg:
+    // images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Contacto Holos - Asesoría para negocios locales" }],
+    // =========================================================================
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contacto | Asesoría digital para tu negocio local - Holos",
+    description:
+      "Ponte en contacto con el equipo de Holos. Cuéntanos sobre tu negocio y recibe asesoría personalizada para mejorar tus reseñas de Google, redes sociales y página web.",
+    // =========================================================================
+    // IMAGEN DE VISTA PREVIA TWITTER (CONTACTO):
+    // Descomenta al colocar la imagen en public/og-image.jpg:
+    // images: ["/og-image.jpg"],
+    // =========================================================================
+  },
 };
 
 export default function ContactPage() {
