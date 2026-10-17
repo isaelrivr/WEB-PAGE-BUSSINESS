@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle, ArrowRight } from "lucide-react";
 
@@ -6,14 +7,34 @@ export default function Hero() {
     "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio";
 
   return (
-    <section className="relative flex-1 flex items-center justify-center py-20 sm:py-28 md:py-36 lg:py-44 px-4 sm:px-6 lg:px-8 overflow-hidden bg-background">
-      {/* Detalle decorativo sutil: degradado suave con celeste y lila a muy baja opacidad */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] sm:w-[700px] h-[300px] bg-gradient-to-tr from-accent/10 via-highlight/10 to-transparent blur-3xl -z-10 pointer-events-none rounded-full"
-      />
+    <section className="relative flex-1 flex items-center justify-center -mt-20 pt-28 sm:pt-36 md:pt-40 pb-20 sm:pb-28 md:pb-36 min-h-screen px-4 sm:px-6 lg:px-8 overflow-hidden bg-background">
+      {/* 
+        =======================================================================
+        FONDO DEL HERO:
+        Imagen /images/hero.webp que ocupa todo el ancho y alto, llegando hasta
+        arriba detrás del menú, con capa de degradado vertical (70% arriba,
+        50% centro y blanco sólido al final) para máxima legibilidad y fusión.
+        =======================================================================
+      */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none select-none">
+        <Image
+          src="/images/hero.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
 
-      <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+        {/* Capa en degradado vertical: blanco al 70% arriba, 50% al centro y blanco sólido al final */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white"
+        />
+      </div>
+
+      {/* Contenido centrado del Hero */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
         {/* Titular grande (peso 700, color texto principal) */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-text-main leading-[1.12] text-balance animate-fade-in-up">
           Más reseñas y mejor presencia online para tu negocio local
@@ -31,20 +52,20 @@ export default function Hero() {
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-base font-medium text-white bg-primary hover:bg-primary/90 transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-base font-medium text-white bg-primary hover:bg-primary/90 transition-[background-color,transform,box-shadow] duration-200 shadow-sm hover:shadow active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Escríbenos por WhatsApp (abre en una nueva pestaña)"
           >
-            <MessageCircle className="w-5 h-5 fill-current" />
+            <MessageCircle className="w-5 h-5 fill-current" aria-hidden="true" />
             <span>Escríbenos por WhatsApp</span>
           </a>
 
           {/* Botón secundario: Ver servicios */}
           <Link
             href="#servicios"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base font-medium text-primary bg-background border-2 border-primary hover:bg-primary/5 transition-all duration-200 shadow-sm active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base font-medium text-primary bg-background border-2 border-primary hover:bg-primary/5 transition-[background-color,transform,box-shadow] duration-200 shadow-sm active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             <span>Ver servicios</span>
-            <ArrowRight className="w-4 h-4 text-primary" />
+            <ArrowRight className="w-4 h-4 text-primary" aria-hidden="true" />
           </Link>
         </div>
       </div>

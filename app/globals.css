@@ -66,8 +66,8 @@ p {
 
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up {
-    animation: none;
-    opacity: 1;
-    transform: none;
+    animation: none !important;
+    transform: none !important;
   }
 }
+
