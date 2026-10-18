@@ -50,7 +50,7 @@ export default function GoogleScreen({ reducedMotion = false }: ScreenProps) {
             </div>
 
             <span className="text-[9px] font-semibold text-[#0EA5E9] bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200/60">
-              #1 Local
+              Destacado
             </span>
           </div>
 

@@ -8,12 +8,13 @@ import {
   useTransform,
   useReducedMotion,
   useMotionValueEvent,
+  useMotionValue,
 } from "motion/react";
 import { QrCode, Store, Globe, Share2, type LucideIcon } from "lucide-react";
-import ResenasVisual from "./servicios/visuals/ResenasVisual";
-import GoogleBusinessVisual from "./servicios/visuals/GoogleBusinessVisual";
-import WebVisual from "./servicios/visuals/WebVisual";
-import RedesVisual from "./servicios/visuals/RedesVisual";
+import ResenasScene from "@/components/scenes/ResenasScene";
+import GoogleScene from "@/components/scenes/GoogleScene";
+import WebScene from "@/components/scenes/WebScene";
+import RedesScene from "@/components/scenes/RedesScene";
 
 interface ServiceItem {
   number: string;
@@ -73,11 +74,11 @@ const CARD_GRADIENTS = [
   "bg-gradient-to-br from-[#0EA5E9]/[0.08] via-[#A78BFA]/[0.08] to-white",
 ];
 
-const VISUAL_COMPONENTS = [
-  ResenasVisual,
-  GoogleBusinessVisual,
-  WebVisual,
-  RedesVisual,
+const SCENE_COMPONENTS = [
+  ResenasScene,
+  GoogleScene,
+  WebScene,
+  RedesScene,
 ];
 
 export default function Services() {
@@ -85,6 +86,9 @@ export default function Services() {
   const prefersReduced = useReducedMotion();
   const [isMounted, setIsMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // MotionValue estático en t=1 para modo accesible
+  const staticT = useMotionValue(1);
 
   useEffect(() => {
     setIsMounted(true);
@@ -98,14 +102,14 @@ export default function Services() {
     offset: ["start start", "end end"],
   });
 
-  // Suavizado con useSpring tal como se especificó: stiffness 120, damping 28, mass 0.4
+  // Suavizado con useSpring: stiffness 120, damping 28, mass 0.4
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 28,
     mass: 0.4,
   });
 
-  // Seguimiento del servicio activo según el scroll para la lista y accesibilidad
+  // Seguimiento del servicio activo según el scroll
   useMotionValueEvent(smoothProgress, "change", (latest) => {
     if (latest < 0.25) {
       setActiveIndex(0);
@@ -118,33 +122,43 @@ export default function Services() {
     }
   });
 
-  // Manchas de color difuminadas de fondo: desplazamiento suave con scroll
+  // Manchas de color difuminadas de fondo
   const blob1X = useTransform(smoothProgress, [0, 1], ["0px", "60px"]);
   const blob1Y = useTransform(smoothProgress, [0, 1], ["-20px", "80px"]);
 
   const blob2X = useTransform(smoothProgress, [0, 1], ["0px", "-60px"]);
   const blob2Y = useTransform(smoothProgress, [0, 1], ["30px", "-60px"]);
 
-  // Valores de 'foco' (0 a 1) para cada visual conforme su tarjeta llega al frente
-  // Tarjeta 0: el foco se completa en el primer tramo (0.0 a 0.16)
-  const foco0 = useTransform(smoothProgress, [0.0, 0.16], [0, 1], {
-    clamp: true,
-  });
-  // Tarjeta 1: el foco sube de 0 a 1 mientras la tarjeta entra al frente (0.18 a 0.32)
-  const foco1 = useTransform(smoothProgress, [0.18, 0.32], [0, 1], {
-    clamp: true,
-  });
-  // Tarjeta 2: el foco sube de 0 a 1 mientras la tarjeta entra al frente (0.46 a 0.60)
-  const foco2 = useTransform(smoothProgress, [0.46, 0.6], [0, 1], {
-    clamp: true,
-  });
-  // Tarjeta 3: el foco sube de 0 a 1 mientras la tarjeta entra al frente (0.74 a 0.88)
-  const foco3 = useTransform(smoothProgress, [0.74, 0.88], [0, 1], {
+  // t de cada escena derivado del scroll: useTransform(progress, [b - 0.35*step, c - 0.1*step], [0, 1])
+  const step = 0.14;
+
+  // Tarjeta 0: inicia al frente en scroll 0; termina antes de que la tarjeta 1 empiece a reemplazarla (c = 0.18)
+  const t0 = useTransform(smoothProgress, [0, 0.18 - 0.1 * step], [0, 1], {
     clamp: true,
   });
 
-  // Animaciones de las tarjetas (solo transform y opacity para máximo rendimiento)
-  // Tarjeta 0: Inicia al frente, se reduce a 0.92, -10% y opacidad 0.4 al entrar tarjeta 1
+  // Tarjeta 1: entra a=0.18, llega al frente b=0.32, salida c=0.46
+  const t1 = useTransform(
+    smoothProgress,
+    [0.32 - 0.35 * step, 0.46 - 0.1 * step],
+    [0, 1],
+    { clamp: true }
+  );
+
+  // Tarjeta 2: entra a=0.46, llega al frente b=0.60, salida c=0.74
+  const t2 = useTransform(
+    smoothProgress,
+    [0.6 - 0.35 * step, 0.74 - 0.1 * step],
+    [0, 1],
+    { clamp: true }
+  );
+
+  // Tarjeta 3: entra a=0.74, llega al frente b=0.88, final = 1
+  const t3 = useTransform(smoothProgress, [0.88 - 0.35 * step, 1], [0, 1], {
+    clamp: true,
+  });
+
+  // Animaciones de posicionamiento de las tarjetas
   const card0Y = useTransform(
     smoothProgress,
     [0, 0.18, 0.32, 0.46, 0.6, 1],
@@ -161,7 +175,6 @@ export default function Services() {
     [1, 1, 0.4, 0.4, 0.15, 0.15, 0, 0]
   );
 
-  // Tarjeta 1: Entra de 110% a 0%, luego se reduce a 0.92, -10% y opacidad 0.4 al entrar tarjeta 2
   const card1Y = useTransform(
     smoothProgress,
     [0, 0.18, 0.32, 0.46, 0.6, 0.74, 0.88, 1],
@@ -178,7 +191,6 @@ export default function Services() {
     [0, 0, 1, 1, 0.4, 0.4, 0.15, 0.15]
   );
 
-  // Tarjeta 2: Entra de 110% a 0%, luego se reduce a 0.92, -10% y opacidad 0.4 al entrar tarjeta 3
   const card2Y = useTransform(
     smoothProgress,
     [0, 0.46, 0.6, 0.74, 0.88, 1],
@@ -195,7 +207,6 @@ export default function Services() {
     [0, 0, 1, 1, 0.4, 0.4]
   );
 
-  // Tarjeta 3: Entra de 110% a 0% y queda al frente
   const card3Y = useTransform(
     smoothProgress,
     [0, 0.74, 0.88, 1],
@@ -208,7 +219,7 @@ export default function Services() {
     [0, 0, 1, 1]
   );
 
-  // Lista numerada (columna izquierda): el elemento activo resalta al 100% y se desplaza a la derecha
+  // Lista numerada (columna izquierda): el elemento activo resalta al 100%
   const list0Opacity = useTransform(
     smoothProgress,
     [0, 0.2, 0.3, 1],
@@ -254,10 +265,10 @@ export default function Services() {
   );
 
   const cardTransforms = [
-    { y: card0Y, scale: card0Scale, opacity: card0Opacity, zIndex: 10, foco: foco0 },
-    { y: card1Y, scale: card1Scale, opacity: card1Opacity, zIndex: 20, foco: foco1 },
-    { y: card2Y, scale: card2Scale, opacity: card2Opacity, zIndex: 30, foco: foco2 },
-    { y: card3Y, scale: card3Scale, opacity: card3Opacity, zIndex: 40, foco: foco3 },
+    { y: card0Y, scale: card0Scale, opacity: card0Opacity, zIndex: 10, t: t0 },
+    { y: card1Y, scale: card1Scale, opacity: card1Opacity, zIndex: 20, t: t1 },
+    { y: card2Y, scale: card2Scale, opacity: card2Opacity, zIndex: 30, t: t2 },
+    { y: card3Y, scale: card3Scale, opacity: card3Opacity, zIndex: 40, t: t3 },
   ];
 
   const listTransforms = [
@@ -281,7 +292,7 @@ export default function Services() {
     });
   };
 
-  // Modo accesible: cuadrícula normal estática si el usuario tiene activado 'reducir movimiento'
+  // Modo accesible: cuadrícula normal estática con las escenas en t=1
   if (shouldReduceMotion) {
     return (
       <section
@@ -305,7 +316,7 @@ export default function Services() {
             {SERVICES.map((service, index) => {
               const Icon = service.icon;
               const isCeleste = index % 2 === 0;
-              const VisualComponent = VISUAL_COMPONENTS[index];
+              const SceneComponent = SCENE_COMPONENTS[index];
               const gradientClass = CARD_GRADIENTS[index];
 
               return (
@@ -336,13 +347,19 @@ export default function Services() {
                       {service.description}
                     </p>
 
-                    {/* Visual ilustrativo en estado final sin animación */}
-                    <div className="mb-4">
-                      <VisualComponent foco={smoothProgress} reducedMotion={true} />
+                    {/* Escena en celular estático t=1 */}
+                    <div className="my-4 flex justify-center">
+                      <div className="w-[220px] h-[340px] rounded-[1.75rem] bg-[#111827] p-2 shadow-md border-2 border-slate-800/80 flex flex-col justify-between shrink-0 select-none">
+                        <div className="w-14 h-2.5 bg-black rounded-full mx-auto shrink-0 mb-1" />
+                        <div className="relative flex-1 w-full rounded-[1.25rem] bg-white overflow-hidden p-1.5 flex flex-col border border-slate-200/50">
+                          <SceneComponent t={staticT} reducedMotion={true} />
+                        </div>
+                        <div className="w-16 h-1 bg-slate-700 rounded-full mx-auto mt-1 shrink-0" />
+                      </div>
                     </div>
                   </div>
 
-                  {/* Enlace 'Quiero esto →' a WhatsApp con mensaje prellenado */}
+                  {/* Enlace WhatsApp */}
                   <div className="pt-3.5 border-t border-border/60 flex items-center justify-between">
                     <a
                       href={`https://wa.me/5210000000000?text=${encodeURIComponent(
@@ -371,16 +388,16 @@ export default function Services() {
     );
   }
 
-  // Versión animada ligada al scroll
+  // Versión interactiva ligada al scroll
   return (
     <section
       id="servicios"
       ref={sectionRef}
       className="relative h-[400vh] border-t border-border bg-surface/30"
     >
-      {/* Contenedor Sticky que se mantiene fijo mientras el usuario hace scroll */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-24 sm:pt-28 pb-6 px-4 sm:px-6 lg:px-8">
-        {/* Manchas de color difuminadas de fondo (lila #A78BFA y celeste #0EA5E9) */}
+      {/* Contenedor Sticky fijo durante el scroll */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-16 sm:pt-20 lg:pt-24 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8">
+        {/* Manchas difuminadas de fondo */}
         <motion.div
           style={{ x: blob1X, y: blob1Y }}
           className="absolute -top-24 -left-24 w-80 h-80 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] rounded-full bg-[#A78BFA]/15 blur-3xl pointer-events-none select-none"
@@ -392,26 +409,26 @@ export default function Services() {
           aria-hidden="true"
         />
 
-        {/* Contenido principal en dos columnas (escritorio) o una columna (celular) */}
+        {/* Contenido principal */}
         <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col justify-center relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
-            {/* Columna Izquierda (Escritorio) / Arriba (Celular) */}
-            <div className="lg:col-span-5 flex flex-col justify-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+            {/* Columna Izquierda: Encabezado y lista de selección */}
+            <div className="lg:col-span-4 flex flex-col justify-center">
               <div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-primary/10 text-primary w-fit mb-3">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-primary/10 text-primary w-fit mb-2 sm:mb-3">
                   Servicios
                 </span>
-                <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-text-main leading-tight mb-3">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-text-main leading-tight mb-2 sm:mb-3">
                   Lo que hacemos por tu negocio
                 </h2>
-                <p className="text-sm sm:text-base lg:text-lg text-text-muted font-normal leading-relaxed max-w-md">
+                <p className="text-xs sm:text-sm lg:text-base text-text-muted font-normal leading-relaxed max-w-md">
                   Soluciones prácticas para ganar visibilidad local y fortalecer la presencia digital de tu empresa.
                 </p>
               </div>
 
-              {/* Lista numerada interactiva (solo en escritorio) */}
+              {/* Lista interactiva (solo escritorio) */}
               <div
-                className="hidden lg:flex flex-col space-y-3 pt-6 mt-6 border-t border-border/70"
+                className="hidden lg:flex flex-col space-y-2.5 pt-5 mt-5 border-t border-border/70"
                 role="tablist"
                 aria-label="Lista de servicios"
               >
@@ -427,7 +444,7 @@ export default function Services() {
                         opacity: listTransforms[index].opacity,
                         x: listTransforms[index].x,
                       }}
-                      className="group flex items-center gap-4 text-left p-2.5 rounded-xl transition-colors hover:bg-white/80 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                      className="group flex items-center gap-3.5 text-left p-2 rounded-xl transition-colors hover:bg-white/80 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                       role="tab"
                       aria-selected={isActive}
                       tabIndex={0}
@@ -446,7 +463,7 @@ export default function Services() {
                         {service.number}
                       </span>
                       <span
-                        className={`text-base font-semibold tracking-tight transition-colors ${
+                        className={`text-sm sm:text-base font-semibold tracking-tight transition-colors ${
                           isActive
                             ? "text-text-main"
                             : "text-text-muted group-hover:text-text-main"
@@ -460,15 +477,18 @@ export default function Services() {
               </div>
             </div>
 
-            {/* Columna Derecha: Tarjetas apiladas con sus respectivos visuales */}
-            <div className="lg:col-span-7 flex items-center justify-center">
-              <div className="relative w-full max-w-md lg:max-w-xl h-[470px] sm:h-[500px] lg:h-[520px]">
+            {/* Columna Derecha: Tarjetas apiladas con dos columnas en escritorio y marco de celular */}
+            <div className="lg:col-span-8 flex items-center justify-center">
+              <div className="relative w-full max-w-lg lg:max-w-3xl xl:max-w-4xl h-[560px] sm:h-[580px] lg:h-[520px]">
                 {SERVICES.map((service, index) => {
                   const Icon = service.icon;
                   const isCeleste = index % 2 === 0;
                   const transform = cardTransforms[index];
-                  const VisualComponent = VISUAL_COMPONENTS[index];
+                  const SceneComponent = SCENE_COMPONENTS[index];
                   const gradientClass = CARD_GRADIENTS[index];
+
+                  // Optimización de rendimiento: montar escena solo si está cerca de la tarjeta activa (distancia <= 1)
+                  const isNearby = Math.abs(activeIndex - index) <= 1;
 
                   return (
                     <motion.div
@@ -480,58 +500,83 @@ export default function Services() {
                         zIndex: transform.zIndex,
                         transformOrigin: "top center",
                       }}
-                      className={`absolute inset-0 w-full h-full rounded-[2rem] ${gradientClass} border border-indigo-100/70 shadow-xl shadow-indigo-500/10 p-5 sm:p-7 flex flex-col justify-between select-none`}
+                      className={`absolute inset-0 w-full h-full rounded-[2rem] ${gradientClass} border border-indigo-100/70 shadow-xl shadow-indigo-500/10 p-5 sm:p-6 lg:p-7 flex flex-col justify-between select-none overflow-hidden`}
                     >
-                      <div>
-                        {/* Cabecera de la tarjeta: Icono con recuadro y número grande en índigo tenue */}
-                        <div className="flex items-center justify-between mb-3 sm:mb-4">
-                          <div
-                            className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shadow-xs ${
-                              isCeleste
-                                ? "bg-[#0EA5E9]/10 text-[#0EA5E9]"
-                                : "bg-primary/10 text-primary"
-                            }`}
-                          >
-                            <Icon className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.8]" />
+                      <div className="h-full flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-6 items-center justify-between">
+                        {/* Columna Izquierda (Escritorio): Número, Icono, Título, Descripción y Enlace WhatsApp */}
+                        <div className="w-full lg:col-span-7 flex flex-col justify-between h-full py-1">
+                          <div>
+                            {/* Cabecera: Icono y número */}
+                            <div className="flex items-center justify-between mb-2.5 sm:mb-4">
+                              <div
+                                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shadow-xs ${
+                                  isCeleste
+                                    ? "bg-[#0EA5E9]/10 text-[#0EA5E9]"
+                                    : "bg-primary/10 text-primary"
+                                }`}
+                              >
+                                <Icon className="w-5 h-5 stroke-[1.8]" />
+                              </div>
+                              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary/15 font-sans tracking-tight select-none">
+                                {service.number}
+                              </span>
+                            </div>
+
+                            {/* Título y descripción */}
+                            <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-text-main tracking-tight mb-1.5 sm:mb-2">
+                              {service.title}
+                            </h3>
+                            <p className="text-xs sm:text-sm lg:text-base text-text-muted font-normal leading-relaxed mb-3 sm:mb-4 line-clamp-3 sm:line-clamp-none">
+                              {service.description}
+                            </p>
                           </div>
-                          <span className="text-4xl sm:text-5xl font-extrabold text-primary/15 font-sans tracking-tight select-none">
-                            {service.number}
-                          </span>
+
+                          {/* Enlace 'Quiero esto →' a WhatsApp */}
+                          <div className="pt-2.5 sm:pt-3 border-t border-border/60 flex items-center justify-between">
+                            <a
+                              href={`https://wa.me/5210000000000?text=${encodeURIComponent(
+                                WHATSAPP_MESSAGES[service.title] ||
+                                  "Hola, me gustaría más información sobre sus servicios."
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-xs sm:text-sm lg:text-base font-semibold text-primary hover:text-[#4338CA] transition-colors group/link"
+                            >
+                              <span>Quiero esto</span>
+                              <span className="transition-transform duration-200 group-hover/link:translate-x-1">
+                                →
+                              </span>
+                            </a>
+                            <span className="text-[11px] sm:text-xs font-mono font-medium text-text-muted/60">
+                              Servicio {service.number}
+                            </span>
+                          </div>
                         </div>
 
-                        {/* Título y descripción */}
-                        <h3 className="text-xl sm:text-2xl font-bold text-text-main tracking-tight mb-1 sm:mb-1.5">
-                          {service.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-text-muted font-normal leading-relaxed line-clamp-2 sm:line-clamp-none">
-                          {service.description}
-                        </p>
-                      </div>
+                        {/* Columna Derecha (Escritorio) / Abajo (Celular): Marco de celular con la escena */}
+                        <div className="w-full lg:col-span-5 flex items-center justify-center shrink-0">
+                          <div className="w-[230px] sm:w-[250px] lg:w-[285px] h-[330px] sm:h-[360px] lg:h-[465px] rounded-[2rem] lg:rounded-[2.5rem] bg-[#111827] p-2 lg:p-2.5 shadow-[0_20px_50px_-12px_rgba(79,70,229,0.28)] border-4 border-slate-800/80 relative flex flex-col justify-between shrink-0 select-none">
+                            {/* Notch */}
+                            <div className="w-16 lg:w-20 h-3 lg:h-3.5 bg-black rounded-full mx-auto shrink-0 mb-1 z-30" />
 
-                      {/* Visual interactivo exclusivo de este servicio */}
-                      <div className="my-auto py-2">
-                        <VisualComponent foco={transform.foco} reducedMotion={false} />
-                      </div>
+                            {/* Pantalla del celular con la escena */}
+                            <div className="relative flex-1 w-full rounded-[1.5rem] lg:rounded-[2rem] bg-white overflow-hidden p-1.5 lg:p-2 flex flex-col border border-slate-200/50">
+                              {isNearby ? (
+                                <SceneComponent
+                                  t={transform.t}
+                                  reducedMotion={false}
+                                />
+                              ) : (
+                                <div className="h-full w-full bg-slate-50 flex items-center justify-center">
+                                  <div className="w-6 h-6 rounded-full bg-slate-200 animate-pulse" />
+                                </div>
+                              )}
+                            </div>
 
-                      {/* Pie: Enlace 'Quiero esto →' a WhatsApp con mensaje prellenado */}
-                      <div className="pt-3 border-t border-border/60 flex items-center justify-between">
-                        <a
-                          href={`https://wa.me/5210000000000?text=${encodeURIComponent(
-                            WHATSAPP_MESSAGES[service.title] ||
-                              "Hola, me gustaría más información sobre sus servicios."
-                          )}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-[#4338CA] transition-colors group/link"
-                        >
-                          <span>Quiero esto</span>
-                          <span className="transition-transform duration-200 group-hover/link:translate-x-1">
-                            →
-                          </span>
-                        </a>
-                        <span className="text-xs font-mono font-medium text-text-muted/60">
-                          Servicio {service.number}
-                        </span>
+                            {/* Barra inferior del marco */}
+                            <div className="w-20 lg:w-24 h-1 bg-slate-700 rounded-full mx-auto mt-1 shrink-0" />
+                          </div>
+                        </div>
                       </div>
                     </motion.div>
                   );
@@ -541,7 +586,7 @@ export default function Services() {
           </div>
         </div>
 
-        {/* Barra de progreso delgada en el borde inferior que se llena de izquierda a derecha */}
+        {/* Barra de progreso inferior */}
         <div className="absolute bottom-0 inset-x-0 h-1 bg-border/40 z-20">
           <motion.div
             style={{ scaleX: smoothProgress }}
