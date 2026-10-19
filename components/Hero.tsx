@@ -152,6 +152,28 @@ export default function Hero() {
         chip3X={chip3X}
         chip3Y={chip3Y}
       />
+
+      {/* INDICADOR DE SCROLL ANIMADO */}
+      {!shouldReduceMotion && (
+        <motion.div
+          aria-hidden="true"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8, duration: 0.6 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 pointer-events-none select-none"
+        >
+          <span className="text-[10px] font-medium tracking-widest uppercase text-text-muted/50">
+            Scroll
+          </span>
+          <div className="w-5 h-8 rounded-full border-2 border-text-muted/25 flex items-start justify-center pt-1.5">
+            <motion.div
+              animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1 h-2 rounded-full bg-primary/60"
+            />
+          </div>
+        </motion.div>
+      )}
     </section>
   );
 }

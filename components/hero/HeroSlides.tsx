@@ -241,7 +241,12 @@ export default function HeroSlides({
   )}`;
 
   return (
-    <div className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+    <motion.div
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center"
+    >
       {/* 
         COLUMNA IZQUIERDA: TEXTO SINCRONIZADO
         Las 4 versiones se apilan en la misma celda de grid (col-start-1 row-start-1)
@@ -298,7 +303,7 @@ export default function HeroSlides({
                   <span>{slide.badge}</span>
                 </motion.div>
 
-                {/* Titular visible: entrada palabra por palabra con stagger corto (< 0.5 s en total) */}
+                {/* Titular visible: entrada palabra por palabra con stagger enriquecido */}
                 <h2
                   aria-hidden="true"
                   className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-text-main leading-[1.12]"
@@ -312,14 +317,15 @@ export default function HeroSlides({
                         initial={false}
                         animate={
                           isActive
-                            ? { opacity: 1, y: 0 }
-                            : { opacity: 0, y: 12 }
+                            ? { opacity: 1, y: 0, rotateX: 0 }
+                            : { opacity: 0, y: 16, rotateX: 8 }
                         }
                         transition={{
-                          duration: 0.22,
-                          delay: isActive ? Math.min(wIdx * 0.03, 0.28) : 0,
+                          duration: 0.35,
+                          delay: isActive ? Math.min(wIdx * 0.038, 0.32) : 0,
                           ease: [0.16, 1, 0.3, 1],
                         }}
+                        style={{ transformOrigin: "bottom center", display: "inline-block" }}
                         className={`inline-block ${
                           word.toLowerCase().includes("reseña") ||
                           word.toLowerCase().includes("segundos") ||
@@ -336,14 +342,18 @@ export default function HeroSlides({
                   ))}
                 </h2>
 
-                {/* Subtítulo: fade */}
+                {/* Subtítulo: slide desde abajo con fade */}
                 <motion.p
                   initial={false}
-                  animate={isActive ? { opacity: 1 } : { opacity: 0 }}
+                  animate={
+                    isActive
+                      ? { opacity: 1, y: 0 }
+                      : { opacity: 0, y: 10 }
+                  }
                   transition={{
-                    duration: 0.35,
-                    delay: isActive ? 0.16 : 0,
-                    ease: "easeOut",
+                    duration: 0.45,
+                    delay: isActive ? 0.22 : 0,
+                    ease: [0.16, 1, 0.3, 1],
                   }}
                   className="mt-6 text-lg sm:text-xl text-[#374151] font-medium leading-relaxed max-w-xl"
                 >
@@ -635,11 +645,11 @@ export default function HeroSlides({
                 <motion.div
                   key={activeIndex}
                   initial={
-                    shouldReduceMotion ? false : { opacity: 0, x: 16 }
+                    shouldReduceMotion ? false : { opacity: 0, x: 24, scale: 0.98 }
                   }
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -16 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -24, scale: 0.98 }}
+                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
                   className="h-full w-full"
                 >
                   <ActiveSceneComponent
@@ -662,6 +672,6 @@ export default function HeroSlides({
           </span>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 }
