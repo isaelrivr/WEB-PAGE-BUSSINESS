@@ -64,10 +64,86 @@ p {
   animation-delay: 300ms;
 }
 
+/* Animaciones infinitas ejecutadas en el hilo del compositor GPU */
+@keyframes float1 {
+  0%, 100% {
+    transform: translateY(-4px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+@keyframes float2 {
+  0%, 100% {
+    transform: translateY(5px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes float3 {
+  0%, 100% {
+    transform: translateY(-3.5px);
+  }
+  50% {
+    transform: translateY(3.5px);
+  }
+}
+
+@keyframes floatPhone {
+  0%, 100% {
+    transform: translateY(-4px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-float-1 {
+  animation: float1 4.8s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float2 5.5s ease-in-out 0.8s infinite;
+}
+
+.animate-float-3 {
+  animation: float3 4.2s ease-in-out 1.5s infinite;
+}
+
+.animate-float-phone {
+  animation: floatPhone 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3.5s ease-in-out 1s infinite;
+}
+
+/* Optimización de renderizado diferido para secciones no-sticky */
+.section-content-visibility {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 700px;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-phone,
+  .animate-shimmer,
   .animate-fade-in-up {
     animation: none !important;
     transform: none !important;
   }
 }
-

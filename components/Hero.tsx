@@ -46,16 +46,42 @@ export default function Hero() {
   const chip3X = useTransform(smoothMouseX, [-1, 1], [-16, 16]);
   const chip3Y = useTransform(smoothMouseY, [-1, 1], [18, -18]);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+  const heroRectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
     if (shouldReduceMotion) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    heroRectRef.current = {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (shouldReduceMotion) return;
+    if (typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches) {
+      return;
+    }
+    if (!heroRectRef.current) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      heroRectRef.current = {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+    }
+    const { left, top, width, height } = heroRectRef.current;
+    const x = ((e.clientX - left) / width) * 2 - 1;
+    const y = ((e.clientY - top) / height) * 2 - 1;
     mouseX.set(x);
     mouseY.set(y);
   };
 
   const handleMouseLeave = () => {
+    heroRectRef.current = null;
     mouseX.set(0);
     mouseY.set(0);
   };
@@ -75,6 +101,7 @@ export default function Hero() {
   return (
     <section
       ref={heroRef}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className="relative isolate flex items-center justify-center -mt-20 pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-24 min-h-screen px-4 sm:px-6 lg:px-8 overflow-hidden bg-background"
@@ -82,7 +109,11 @@ export default function Hero() {
       {/* FONDO CON NEXT/IMAGE, PARALLAX (SCALE 1.1) Y DEGRADADOS DE LEGIBILIDAD */}
       <motion.div
         aria-hidden="true"
-        style={shouldReduceMotion ? { scale: 1 } : { y: bgY, scale: 1.1 }}
+        style={
+          shouldReduceMotion
+            ? { scale: 1 }
+            : { y: bgY, scale: 1.1, willChange: "transform" }
+        }
         className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none"
       >
         <Image

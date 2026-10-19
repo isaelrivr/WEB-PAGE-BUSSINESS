@@ -364,19 +364,9 @@ export default function HeroSlides({
             className="relative overflow-hidden w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full text-base font-semibold text-white bg-primary hover:bg-primary/90 transition-[background-color,transform,box-shadow] duration-200 shadow-md hover:shadow-lg active:scale-[0.98] group/btn focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Escríbenos por WhatsApp (abre en una nueva pestaña)"
           >
-            {/* Brillo dinámico cada 4 s */}
+            {/* Brillo dinámico mediante CSS keyframe en el compositor */}
             {!shouldReduceMotion && (
-              <motion.div
-                initial={{ x: "-150%" }}
-                animate={{ x: "250%" }}
-                transition={{
-                  repeat: Infinity,
-                  repeatDelay: 2.8,
-                  duration: 1.2,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent -skew-x-12 pointer-events-none"
-              />
+              <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent -skew-x-12 pointer-events-none animate-shimmer" />
             )}
 
             <MessageCircle
@@ -506,14 +496,10 @@ export default function HeroSlides({
           }
           className="hidden lg:flex absolute -left-10 top-20 z-20 pointer-events-none select-none"
         >
-          <motion.div
-            animate={shouldReduceMotion ? undefined : { y: [-4, 4, -4] }}
-            transition={{
-              duration: 4.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2"
+          <div
+            className={`rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2 ${
+              shouldReduceMotion ? "" : "animate-float-1"
+            }`}
           >
             <div className="w-7 h-7 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center text-[#F59E0B]">
               <Star className="w-4 h-4 fill-[#F59E0B]" />
@@ -528,7 +514,7 @@ export default function HeroSlides({
               </div>
               <span className="text-[10px] font-bold text-slate-700">Reseñas</span>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Chip 2: Google Maps */}
@@ -543,15 +529,10 @@ export default function HeroSlides({
           }
           className="hidden lg:flex absolute -right-10 top-32 z-20 pointer-events-none select-none"
         >
-          <motion.div
-            animate={shouldReduceMotion ? undefined : { y: [5, -5, 5] }}
-            transition={{
-              duration: 5.5,
-              delay: 0.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2.5"
+          <div
+            className={`rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2.5 ${
+              shouldReduceMotion ? "" : "animate-float-2"
+            }`}
           >
             <div className="w-7 h-7 rounded-xl bg-sky-50 border border-sky-200/60 flex items-center justify-center text-[#0EA5E9]">
               <MapPin className="w-4 h-4 fill-[#0EA5E9] stroke-white" />
@@ -564,7 +545,7 @@ export default function HeroSlides({
                 Perfil verificado
               </span>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Chip 3: Toque NFC */}
@@ -579,15 +560,10 @@ export default function HeroSlides({
           }
           className="hidden lg:flex absolute -left-8 bottom-28 z-20 pointer-events-none select-none"
         >
-          <motion.div
-            animate={shouldReduceMotion ? undefined : { y: [-3.5, 3.5, -3.5] }}
-            transition={{
-              duration: 4.2,
-              delay: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2.5"
+          <div
+            className={`rounded-2xl bg-white/60 backdrop-blur-md border border-white/70 shadow-lg shadow-indigo-950/5 px-3 py-2 flex items-center gap-2.5 ${
+              shouldReduceMotion ? "" : "animate-float-3"
+            }`}
           >
             <div className="w-7 h-7 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-primary">
               <Wifi className="w-4 h-4 rotate-90 stroke-[2.5]" />
@@ -600,7 +576,7 @@ export default function HeroSlides({
                 Sin contacto
               </span>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* CONTENEDOR CON PERSPECTIVA 3D Y CELULAR */}
@@ -635,7 +611,7 @@ export default function HeroSlides({
             </AnimatePresence>
           </div>
 
-          {/* MARCO DEL CELULAR CON INCLINACIÓN 3D */}
+          {/* MARCO DEL CELULAR CON INCLINACIÓN 3D Y FLOTACIÓN CSS */}
           <motion.div
             style={
               shouldReduceMotion
@@ -646,13 +622,9 @@ export default function HeroSlides({
                     transformStyle: "preserve-3d",
                   }
             }
-            animate={shouldReduceMotion ? undefined : { y: [-4, 4, -4] }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="w-[290px] sm:w-[310px] h-[580px] sm:h-[600px] rounded-[2.75rem] bg-[#111827] p-2.5 sm:p-3 shadow-[0_25px_60px_-15px_rgba(79,70,229,0.35)] border-4 border-slate-800/80 relative flex flex-col justify-between"
+            className={`w-[290px] sm:w-[310px] h-[580px] sm:h-[600px] rounded-[2.75rem] bg-[#111827] p-2.5 sm:p-3 shadow-[0_20px_45px_-12px_rgba(79,70,229,0.25)] border-4 border-slate-800/80 relative flex flex-col justify-between ${
+              shouldReduceMotion ? "" : "animate-float-phone"
+            }`}
           >
             {/* Notch en forma de píldora (ahora completamente visible y despejado) */}
             <div className="w-22 h-4 bg-black rounded-full mx-auto shrink-0 mb-1 z-30" />

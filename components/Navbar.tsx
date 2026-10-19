@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="max-w-[1200px] mx-auto pointer-events-auto">
         {/* Pastilla flotante estilo GoCanopy */}
         <div
-          className="h-16 px-5 sm:px-6 rounded-full border border-white/20 shadow-lg shadow-indigo-950/15 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/60 backdrop-blur-xl flex items-center justify-between transition-[background-color,box-shadow] duration-300"
+          className="h-16 px-5 sm:px-6 rounded-full border border-white/20 shadow-lg shadow-indigo-950/15 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/60 backdrop-blur-md flex items-center justify-between transition-[background-color,box-shadow] duration-300"
         >
           {/* 1. Izquierda: Logo holos en blanco */}
           <div className="flex-1 flex items-center justify-start">
@@ -108,7 +108,7 @@ export default function Navbar() {
         {mobileMenuOpen && (
           <div
             id="menu-movil"
-            className="md:hidden mt-2 p-5 rounded-3xl border border-white/20 shadow-xl shadow-indigo-950/20 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/85 backdrop-blur-xl animate-in fade-in slide-in-from-top-3 duration-200"
+            className="md:hidden mt-2 p-5 rounded-3xl border border-white/20 shadow-xl shadow-indigo-950/20 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/85 backdrop-blur-md animate-in fade-in slide-in-from-top-3 duration-200"
           >
             <div className="flex flex-col space-y-2">
               {NAV_LINKS.map((link) => (

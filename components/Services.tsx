@@ -9,6 +9,7 @@ import {
   useReducedMotion,
   useMotionValueEvent,
   useMotionValue,
+  useInView,
 } from "motion/react";
 import { QrCode, Store, Globe, Share2, type LucideIcon } from "lucide-react";
 import ResenasScene from "@/components/scenes/ResenasScene";
@@ -83,9 +84,12 @@ const SCENE_COMPONENTS = [
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
+  const isServicesInView = useInView(sectionRef, { margin: "200px 0px" });
   const prefersReduced = useReducedMotion();
   const [isMounted, setIsMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(0);
+  const prevProgressRef = useRef(0);
 
   // MotionValue estático en t=1 para modo accesible
   const staticT = useMotionValue(1);
@@ -109,16 +113,13 @@ export default function Services() {
     mass: 0.4,
   });
 
-  // Seguimiento del servicio activo según el scroll
+  // Seguimiento del servicio activo según el scroll sin despachos redundantes
   useMotionValueEvent(smoothProgress, "change", (latest) => {
-    if (latest < 0.25) {
-      setActiveIndex(0);
-    } else if (latest < 0.53) {
-      setActiveIndex(1);
-    } else if (latest < 0.81) {
-      setActiveIndex(2);
-    } else {
-      setActiveIndex(3);
+    const nextIndex =
+      latest < 0.25 ? 0 : latest < 0.53 ? 1 : latest < 0.81 ? 2 : 3;
+    if (activeIndexRef.current !== nextIndex) {
+      activeIndexRef.current = nextIndex;
+      setActiveIndex(nextIndex);
     }
   });
 
@@ -397,15 +398,15 @@ export default function Services() {
     >
       {/* Contenedor Sticky fijo durante el scroll */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-16 sm:pt-20 lg:pt-24 pb-4 sm:pb-6 px-4 sm:px-6 lg:px-8">
-        {/* Manchas difuminadas de fondo */}
+        {/* Manchas difuminadas de fondo con radial-gradient nativo (sin filtros blur-3xl) */}
         <motion.div
-          style={{ x: blob1X, y: blob1Y }}
-          className="absolute -top-24 -left-24 w-80 h-80 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] rounded-full bg-[#A78BFA]/15 blur-3xl pointer-events-none select-none"
+          style={{ x: blob1X, y: blob1Y, willChange: "transform" }}
+          className="absolute -top-24 -left-24 w-80 h-80 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] rounded-full pointer-events-none select-none [background:radial-gradient(circle,rgba(167,139,250,0.18)_0%,transparent_70%)]"
           aria-hidden="true"
         />
         <motion.div
-          style={{ x: blob2X, y: blob2Y }}
-          className="absolute -bottom-24 -right-24 w-80 h-80 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] rounded-full bg-[#0EA5E9]/15 blur-3xl pointer-events-none select-none"
+          style={{ x: blob2X, y: blob2Y, willChange: "transform" }}
+          className="absolute -bottom-24 -right-24 w-80 h-80 sm:w-96 sm:h-96 lg:w-[480px] lg:h-[480px] rounded-full pointer-events-none select-none [background:radial-gradient(circle,rgba(14,165,233,0.18)_0%,transparent_70%)]"
           aria-hidden="true"
         />
 
@@ -487,8 +488,16 @@ export default function Services() {
                   const SceneComponent = SCENE_COMPONENTS[index];
                   const gradientClass = CARD_GRADIENTS[index];
 
-                  // Optimización de rendimiento: montar escena solo si está cerca de la tarjeta activa (distancia <= 1)
-                  const isNearby = Math.abs(activeIndex - index) <= 1;
+                  // Montar escena solo en la tarjeta activa y la adyacente según dirección de scroll
+                  const isScrollingDown = smoothProgress.get() >= prevProgressRef.current;
+                  prevProgressRef.current = smoothProgress.get();
+
+                  const adjacentIndex = isScrollingDown
+                    ? Math.min(activeIndex + 1, SERVICES.length - 1)
+                    : Math.max(activeIndex - 1, 0);
+
+                  const shouldMountScene =
+                    isServicesInView && (index === activeIndex || index === adjacentIndex);
 
                   return (
                     <motion.div
@@ -500,7 +509,7 @@ export default function Services() {
                         zIndex: transform.zIndex,
                         transformOrigin: "top center",
                       }}
-                      className={`absolute inset-0 w-full h-full rounded-[2rem] ${gradientClass} border border-indigo-100/70 shadow-xl shadow-indigo-500/10 p-5 sm:p-6 lg:p-7 flex flex-col justify-between select-none overflow-hidden`}
+                      className={`absolute inset-0 w-full h-full rounded-[2rem] ${gradientClass} border border-indigo-100/70 shadow-lg shadow-indigo-500/5 p-5 sm:p-6 lg:p-7 flex flex-col justify-between select-none overflow-hidden`}
                     >
                       <div className="h-full flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-6 items-center justify-between">
                         {/* Columna Izquierda (Escritorio): Número, Icono, Título, Descripción y Enlace WhatsApp */}
@@ -555,20 +564,20 @@ export default function Services() {
 
                         {/* Columna Derecha (Escritorio) / Abajo (Celular): Marco de celular con la escena */}
                         <div className="w-full lg:col-span-5 flex items-center justify-center shrink-0">
-                          <div className="w-[230px] sm:w-[250px] lg:w-[285px] h-[330px] sm:h-[360px] lg:h-[465px] rounded-[2rem] lg:rounded-[2.5rem] bg-[#111827] p-2 lg:p-2.5 shadow-[0_20px_50px_-12px_rgba(79,70,229,0.28)] border-4 border-slate-800/80 relative flex flex-col justify-between shrink-0 select-none">
+                          <div className="w-[230px] sm:w-[250px] lg:w-[285px] h-[330px] sm:h-[360px] lg:h-[465px] rounded-[2rem] lg:rounded-[2.5rem] bg-[#111827] p-2 lg:p-2.5 shadow-lg shadow-indigo-950/20 border-4 border-slate-800/80 relative flex flex-col justify-between shrink-0 select-none">
                             {/* Notch */}
                             <div className="w-16 lg:w-20 h-3 lg:h-3.5 bg-black rounded-full mx-auto shrink-0 mb-1 z-30" />
 
                             {/* Pantalla del celular con la escena */}
                             <div className="relative flex-1 w-full rounded-[1.5rem] lg:rounded-[2rem] bg-white overflow-hidden p-1.5 lg:p-2 flex flex-col border border-slate-200/50">
-                              {isNearby ? (
+                              {shouldMountScene ? (
                                 <SceneComponent
                                   t={transform.t}
                                   reducedMotion={false}
                                 />
                               ) : (
                                 <div className="h-full w-full bg-slate-50 flex items-center justify-center">
-                                  <div className="w-6 h-6 rounded-full bg-slate-200 animate-pulse" />
+                                  <div className="w-5 h-5 rounded-full bg-slate-200 animate-pulse" />
                                 </div>
                               )}
                             </div>

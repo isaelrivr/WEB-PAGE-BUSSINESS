@@ -10,34 +10,7 @@ interface SceneProps {
 
 const QUERY_TEXT = "negocio cerca de mí";
 
-// 1. Letra individual para el efecto de máquina de escribir derivado de t (0 a 0.20)
-function TypingChar({
-  t,
-  index,
-  char,
-}: {
-  t: MotionValue<number>;
-  index: number;
-  char: string;
-}) {
-  const start = 0.01 + (index / QUERY_TEXT.length) * 0.18;
-  const opacity = useTransform(t, [start, start + 0.005], [0, 1]);
-  return <motion.span style={{ opacity }}>{char === " " ? "\u00A0" : char}</motion.span>;
-}
-
-// Cursor parpadeante que acompaña el tipeo y luego desaparece
-function BlinkingCursor({ t }: { t: MotionValue<number> }) {
-  const opacity = useTransform(t, (v) => {
-    if (v > 0.22) return 0;
-    return Math.floor(v * 28) % 2 === 0 ? 1 : 0;
-  });
-  return (
-    <motion.span
-      style={{ opacity }}
-      className="inline-block w-[2px] h-3.5 bg-[#0EA5E9] ml-0.5 align-middle rounded-full"
-    />
-  );
-}
+// 1. Efecto de búsqueda optimizado mediante clipPath directo en GoogleScene (0 a 0.20)
 
 // 2. Pin gris secundario con caída y rebote escalonado (0.20 a 0.40) y atenuación posterior
 function GreyMapPin({
@@ -119,7 +92,7 @@ function FeaturedMapPin({ t }: { t: MotionValue<number> }) {
       </div>
 
       {/* Etiqueta flotante 'Tu negocio' */}
-      <div className="mt-1 px-1.5 py-0.5 rounded-md bg-slate-900/85 backdrop-blur-xs text-white text-[8px] font-bold tracking-tight shadow-md whitespace-nowrap">
+      <div className="mt-1 px-1.5 py-0.5 rounded-md bg-slate-900 text-white text-[8px] font-bold tracking-tight shadow-xs whitespace-nowrap">
         Tu negocio
       </div>
     </motion.div>
@@ -182,6 +155,17 @@ function ActionButtons({ t }: { t: MotionValue<number> }) {
 }
 
 export default function GoogleScene({ t, reducedMotion = false }: SceneProps) {
+  // Escritura de texto de búsqueda mediante clipPath (0.01 a 0.20)
+  const queryClip = useTransform(
+    t,
+    [0.01, 0.19],
+    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]
+  );
+  const cursorOpacity = useTransform(t, (v) => {
+    if (v > 0.22) return 0;
+    return Math.floor(v * 28) % 2 === 0 ? 1 : 0;
+  });
+
   // Mapa estilizado: dibujo de calles con pathLength (0.1 a 0.35)
   const streetsPathLength = useTransform(t, [0.1, 0.35], [0.3, 1]);
 
@@ -224,7 +208,7 @@ export default function GoogleScene({ t, reducedMotion = false }: SceneProps) {
           </div>
 
           {/* Tarjeta inferior completa */}
-          <div className="mt-auto w-full bg-white/95 backdrop-blur-md rounded-2xl border border-[#0EA5E9]/40 shadow-xl p-3 flex flex-col gap-2 z-20">
+          <div className="mt-auto w-full bg-white rounded-2xl border border-[#0EA5E9]/40 shadow-md p-3 flex flex-col gap-2 z-20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-[#0EA5E9] text-white flex items-center justify-center shadow-xs">
@@ -269,15 +253,18 @@ export default function GoogleScene({ t, reducedMotion = false }: SceneProps) {
     <div className="relative h-full w-full flex flex-col justify-between overflow-hidden select-none bg-slate-50">
       {/* 
         1. BARRA DE BÚSQUEDA (0 a 0.20)
-        Escribe 'negocio cerca de mí' carácter por carácter con cursor parpadeante
+        Escribe 'negocio cerca de mí' con clipPath acelerado por GPU
       */}
       <div className="w-full bg-white rounded-full border border-slate-200/90 shadow-xs px-3 py-1.5 flex items-center gap-2 shrink-0 z-30 mb-1.5">
         <Search className="w-3.5 h-3.5 text-[#0EA5E9] shrink-0" />
-        <div className="text-xs font-medium text-slate-800 tracking-tight flex items-center">
-          {QUERY_TEXT.split("").map((char, idx) => (
-            <TypingChar key={idx} t={t} index={idx} char={char} />
-          ))}
-          <BlinkingCursor t={t} />
+        <div className="text-xs font-medium text-slate-800 tracking-tight flex items-center overflow-hidden">
+          <motion.span style={{ clipPath: queryClip }} className="whitespace-nowrap inline-block">
+            {QUERY_TEXT}
+          </motion.span>
+          <motion.span
+            style={{ opacity: cursorOpacity }}
+            className="inline-block w-[2px] h-3.5 bg-[#0EA5E9] ml-0.5 align-middle rounded-full shrink-0"
+          />
         </div>
       </div>
 
@@ -412,7 +399,7 @@ export default function GoogleScene({ t, reducedMotion = false }: SceneProps) {
             y: sheetY,
             opacity: sheetOpacity,
           }}
-          className="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-md rounded-t-3xl border-t border-slate-200/90 shadow-2xl p-3 z-30 flex flex-col gap-2"
+          className="absolute inset-x-0 bottom-0 bg-white rounded-t-3xl border-t border-slate-200/90 shadow-lg p-3 z-30 flex flex-col gap-2"
         >
           {/* Manija de arrastre */}
           <div className="w-8 h-1 bg-slate-300 rounded-full mx-auto mb-1 shrink-0" />

@@ -165,10 +165,10 @@ export default function ResenasScene({ t, reducedMotion = false }: SceneProps) {
     [0.7, 0.75],
   ];
 
-  // 5. De 0.78 a 0.9: 3 líneas de texto crecen en ancho y botón 'Publicar' se presiona con ondulación
-  const lineWidth1 = useTransform(t, [0.78, 0.82], ["0%", "100%"]);
-  const lineWidth2 = useTransform(t, [0.81, 0.85], ["0%", "88%"]);
-  const lineWidth3 = useTransform(t, [0.84, 0.88], ["0%", "65%"]);
+  // 5. De 0.78 a 0.9: 3 líneas de texto escalan con scaleX (GPU) y botón 'Publicar' se presiona con ondulación
+  const lineScale1 = useTransform(t, [0.78, 0.82], [0, 1]);
+  const lineScale2 = useTransform(t, [0.81, 0.85], [0, 0.88]);
+  const lineScale3 = useTransform(t, [0.84, 0.88], [0, 0.65]);
 
   const btnScale = useTransform(t, [0.86, 0.885, 0.91], [1, 0.95, 1]);
   const btnRippleScale = useTransform(t, [0.87, 0.92], [0.6, 1.4]);
@@ -307,19 +307,19 @@ export default function ResenasScene({ t, reducedMotion = false }: SceneProps) {
             ))}
           </div>
 
-          {/* 5. 3 Líneas de texto que crecen como escribiéndose */}
+          {/* 5. 3 Líneas de texto que escalan con scaleX en GPU */}
           <div className="space-y-1.5 px-1 py-1">
             <motion.div
-              style={{ width: lineWidth1 }}
-              className="h-1.5 bg-slate-200 rounded-full"
+              style={{ scaleX: lineScale1, transformOrigin: "left" }}
+              className="h-1.5 w-full bg-slate-200 rounded-full"
             />
             <motion.div
-              style={{ width: lineWidth2 }}
-              className="h-1.5 bg-slate-200 rounded-full"
+              style={{ scaleX: lineScale2, transformOrigin: "left" }}
+              className="h-1.5 w-full bg-slate-200 rounded-full"
             />
             <motion.div
-              style={{ width: lineWidth3 }}
-              className="h-1.5 bg-slate-200/80 rounded-full"
+              style={{ scaleX: lineScale3, transformOrigin: "left" }}
+              className="h-1.5 w-full bg-slate-200/80 rounded-full"
             />
           </div>
         </div>

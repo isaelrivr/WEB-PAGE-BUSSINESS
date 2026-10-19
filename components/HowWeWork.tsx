@@ -62,7 +62,7 @@ export default function HowWeWork() {
     <section
       id="como-trabajamos"
       ref={sectionRef}
-      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-background"
+      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-background section-content-visibility"
     >
       <div className="max-w-6xl mx-auto">
         {/* Encabezado */}

@@ -105,7 +105,7 @@ function FeedSquareItem({
       {type === "video" && (
         <>
           <div className="flex justify-end">
-            <span className="p-1 rounded-full bg-black/35 backdrop-blur-xs text-white">
+            <span className="p-1 rounded-full bg-black/45 text-white">
               <Play className="w-2.5 h-2.5 fill-white stroke-none" />
             </span>
           </div>
@@ -119,7 +119,7 @@ function FeedSquareItem({
       {type === "carousel" && (
         <>
           <div className="flex justify-end">
-            <span className="p-1 rounded-full bg-black/35 backdrop-blur-xs text-white">
+            <span className="p-1 rounded-full bg-black/45 text-white">
               <Layers className="w-2.5 h-2.5" />
             </span>
           </div>
@@ -402,7 +402,7 @@ export default function RedesScene({ t, reducedMotion = false }: SceneProps) {
         1. FILA DE 4 CÍRCULOS TIPO HISTORIAS (0 a 0.20)
         Aparecen con rebote escalonado y aros giratorios
       */}
-      <div className="flex items-center gap-2.5 overflow-x-hidden py-1 px-1 border-b border-slate-200/60 bg-white/50 backdrop-blur-xs rounded-xl shrink-0">
+      <div className="flex items-center gap-2.5 overflow-x-hidden py-1 px-1 border-b border-slate-200/60 bg-white/80 rounded-xl shrink-0">
         {[
           "from-primary to-[#0EA5E9]",
           "from-[#A78BFA] to-primary",

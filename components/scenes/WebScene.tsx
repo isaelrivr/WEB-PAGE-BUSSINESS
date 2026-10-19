@@ -19,38 +19,9 @@ interface SceneProps {
 
 const URL_TEXT = "tunegocio.mx";
 
-// Subcomponente para tipear la URL carácter por carácter (0 a 0.14)
-function TypingChar({
-  t,
-  index,
-  char,
-}: {
-  t: MotionValue<number>;
-  index: number;
-  char: string;
-}) {
-  const start = 0.01 + (index / URL_TEXT.length) * 0.13;
-  const opacity = useTransform(t, [start, start + 0.005], [0, 1]);
-  return <motion.span style={{ opacity }}>{char}</motion.span>;
-}
-
-// Cursor parpadeante para la barra de URL
-function BlinkingUrlCursor({ t }: { t: MotionValue<number> }) {
-  const opacity = useTransform(t, (v) => {
-    if (v > 0.16) return 0;
-    return Math.floor(v * 35) % 2 === 0 ? 1 : 0;
-  });
-  return (
-    <motion.span
-      style={{ opacity }}
-      className="inline-block w-[1.5px] h-2.5 bg-emerald-500 ml-0.5 align-middle rounded-full"
-    />
-  );
-}
-
-// Cursor interactivo que recorre una curva y hace clic en el botón del hero (0.75 a 0.88)
+// Cursor interactivo que recorre una curva y hace clic en el botón del hero con transform GPU (0.75 a 0.88)
 function WebCursor({ t }: { t: MotionValue<number> }) {
-  // Trayectoria curva hacia el botón del hero
+  // Trayectoria curva hacia el botón del hero mediante x e y (GPU compositor)
   const cursorX = useTransform(t, [0.75, 0.81, 0.85], [210, 125, 48]);
   const cursorY = useTransform(t, [0.75, 0.8, 0.85], [240, 115, 84]);
   const cursorOpacity = useTransform(t, [0.74, 0.77, 0.88, 0.91], [0, 1, 1, 0]);
@@ -59,12 +30,12 @@ function WebCursor({ t }: { t: MotionValue<number> }) {
   return (
     <motion.div
       style={{
-        left: cursorX,
-        top: cursorY,
+        x: cursorX,
+        y: cursorY,
         opacity: cursorOpacity,
         scale: cursorScale,
       }}
-      className="absolute z-40 pointer-events-none drop-shadow-md"
+      className="absolute top-0 left-0 z-40 pointer-events-none drop-shadow-md"
     >
       <MousePointer2 className="w-4 h-4 fill-slate-900 text-white" />
     </motion.div>
@@ -72,11 +43,22 @@ function WebCursor({ t }: { t: MotionValue<number> }) {
 }
 
 export default function WebScene({ t, reducedMotion = false }: SceneProps) {
-  // 1. Barra de carga: se llena paulatinamente hasta el 100% (0 a 0.94)
-  const loadWidth = useTransform(
+  // Escritura de URL optimizada con clipPath (0 a 0.14)
+  const urlClip = useTransform(
+    t,
+    [0.01, 0.14],
+    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"]
+  );
+  const urlCursorOpacity = useTransform(t, (v) => {
+    if (v > 0.16) return 0;
+    return Math.floor(v * 35) % 2 === 0 ? 1 : 0;
+  });
+
+  // 1. Barra de carga: se llena paulatinamente hasta el 100% mediante scaleX (GPU) (0 a 0.94)
+  const loadScaleX = useTransform(
     t,
     [0, 0.15, 0.45, 0.75, 0.88, 0.94],
-    ["0%", "35%", "65%", "85%", "95%", "100%"]
+    [0, 0.35, 0.65, 0.85, 0.95, 1]
   );
 
   // Palomita y badge 'Rápido' (0.88 a 1.0)
@@ -263,14 +245,17 @@ export default function WebScene({ t, reducedMotion = false }: SceneProps) {
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           </div>
 
-          {/* Barra de URL con escritura progresiva de 'tunegocio.mx' */}
-          <div className="h-4.5 px-2 bg-white rounded-md border border-slate-200/80 flex items-center gap-1 text-[8px] font-mono text-slate-700 shadow-2xs">
+          {/* Barra de URL con escritura progresiva de 'tunegocio.mx' con clipPath */}
+          <div className="h-4.5 px-2 bg-white rounded-md border border-slate-200/80 flex items-center gap-1 text-[8px] font-mono text-slate-700 shadow-2xs overflow-hidden">
             <Lock className="w-2 h-2 text-emerald-500 shrink-0" />
-            <div className="flex items-center">
-              {URL_TEXT.split("").map((char, idx) => (
-                <TypingChar key={idx} t={t} index={idx} char={char} />
-              ))}
-              <BlinkingUrlCursor t={t} />
+            <div className="relative flex items-center overflow-hidden">
+              <motion.span style={{ clipPath: urlClip }} className="whitespace-nowrap inline-block">
+                {URL_TEXT}
+              </motion.span>
+              <motion.span
+                style={{ opacity: urlCursorOpacity }}
+                className="inline-block w-[1.5px] h-2.5 bg-emerald-500 ml-0.5 align-middle rounded-full shrink-0"
+              />
             </div>
           </div>
 
@@ -295,11 +280,11 @@ export default function WebScene({ t, reducedMotion = false }: SceneProps) {
             <span>Rápido</span>
           </motion.div>
 
-          {/* Barra de carga fina animada sobre el borde inferior */}
+          {/* Barra de carga fina animada sobre el borde inferior mediante scaleX */}
           <div className="absolute bottom-0 inset-x-0 h-[2px] bg-slate-200/60 overflow-hidden">
             <motion.div
-              style={{ width: loadWidth }}
-              className="h-full bg-gradient-to-r from-primary via-[#4338CA] to-[#0EA5E9]"
+              style={{ scaleX: loadScaleX, transformOrigin: "left" }}
+              className="w-full h-full bg-gradient-to-r from-primary via-[#4338CA] to-[#0EA5E9]"
             />
           </div>
         </div>
@@ -371,7 +356,7 @@ export default function WebScene({ t, reducedMotion = false }: SceneProps) {
             {/* Barra de navegación pintada */}
             <motion.div
               style={{ clipPath: paintNavClip }}
-              className="flex items-center justify-between px-1 py-0.5 bg-white/90 backdrop-blur-xs rounded-md shadow-2xs border border-slate-100"
+              className="flex items-center justify-between px-1 py-0.5 bg-white/95 rounded-md shadow-2xs border border-slate-100"
             >
               <span className="text-[9px] font-bold tracking-tight text-primary">
                 HOLOS
