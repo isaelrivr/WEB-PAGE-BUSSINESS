@@ -35,7 +35,7 @@ export default function Footer() {
     "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio";
 
   return (
-    <footer ref={footerRef} className="bg-surface border-t border-border text-text-muted mt-auto overflow-hidden">
+    <footer ref={footerRef} className="bg-surface border-t border-border text-text-muted mt-auto overflow-hidden section-content-visibility">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
         <motion.div
           variants={containerVariants}

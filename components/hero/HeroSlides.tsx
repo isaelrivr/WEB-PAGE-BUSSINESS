@@ -26,6 +26,8 @@ import GoogleScene from "@/components/scenes/GoogleScene";
 import WebScene from "@/components/scenes/WebScene";
 import RedesScene from "@/components/scenes/RedesScene";
 
+const EASE_SMOOTH = [0.16, 1, 0.3, 1] as const;
+
 export interface HeroSlideItem {
   badge: string;
   headline: string;
@@ -244,7 +246,7 @@ export default function HeroSlides({
     <motion.div
       initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7, ease: EASE_SMOOTH }}
       className="relative z-10 w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center"
     >
       {/* 
@@ -295,7 +297,7 @@ export default function HeroSlides({
                       ? { opacity: 1, y: 0, scale: 1 }
                       : { opacity: 0, y: -8, scale: 0.95 }
                   }
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.3, ease: EASE_SMOOTH }}
                   className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-slate-200/80 shadow-xs mb-4 text-xs font-bold text-slate-700"
                 >
                   <span className={`w-2 h-2 rounded-full ${slide.dotColor}`} />
@@ -323,7 +325,7 @@ export default function HeroSlides({
                         transition={{
                           duration: 0.35,
                           delay: isActive ? Math.min(wIdx * 0.038, 0.32) : 0,
-                          ease: [0.16, 1, 0.3, 1],
+                          ease: EASE_SMOOTH,
                         }}
                         style={{ transformOrigin: "bottom center", display: "inline-block" }}
                         className={`inline-block ${
@@ -353,7 +355,7 @@ export default function HeroSlides({
                   transition={{
                     duration: 0.45,
                     delay: isActive ? 0.22 : 0,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: EASE_SMOOTH,
                   }}
                   className="mt-6 text-lg sm:text-xl text-[#374151] font-medium leading-relaxed max-w-xl"
                 >
@@ -621,48 +623,49 @@ export default function HeroSlides({
             </AnimatePresence>
           </div>
 
-          {/* MARCO DEL CELULAR CON INCLINACIÓN 3D Y FLOTACIÓN CSS */}
-          <motion.div
-            style={
-              shouldReduceMotion
-                ? undefined
-                : {
-                    rotateX,
-                    rotateY,
-                    transformStyle: "preserve-3d",
-                  }
-            }
-            className={`w-[290px] sm:w-[310px] h-[580px] sm:h-[600px] rounded-[2.75rem] bg-[#111827] p-2.5 sm:p-3 shadow-[0_20px_45px_-12px_rgba(79,70,229,0.25)] border-4 border-slate-800/80 relative flex flex-col justify-between ${
-              shouldReduceMotion ? "" : "animate-float-phone"
-            }`}
-          >
-            {/* Notch en forma de píldora (ahora completamente visible y despejado) */}
-            <div className="w-22 h-4 bg-black rounded-full mx-auto shrink-0 mb-1 z-30" />
+          {/* MARCO DEL CELULAR CON INCLINACIÓN 3D Y FLOTACIÓN CSS DESACOPLADA */}
+          <div className={shouldReduceMotion ? "" : "animate-float-phone"}>
+            <motion.div
+              style={
+                shouldReduceMotion
+                  ? undefined
+                  : {
+                      rotateX,
+                      rotateY,
+                      transformStyle: "preserve-3d",
+                      willChange: "transform",
+                    }
+              }
+              className="w-[290px] sm:w-[310px] h-[580px] sm:h-[600px] rounded-[2.75rem] bg-[#111827] p-2.5 sm:p-3 shadow-[0_20px_45px_-12px_rgba(79,70,229,0.25)] border-4 border-slate-800/80 relative flex flex-col justify-between"
+            >
+              {/* Notch en forma de píldora (ahora completamente visible y despejado) */}
+              <div className="w-22 h-4 bg-black rounded-full mx-auto shrink-0 mb-1 z-30" />
 
-            {/* Pantalla blanca del celular con esquinas redondeadas y escena activa */}
-            <div className="relative flex-1 w-full rounded-[2.25rem] bg-white overflow-hidden p-2 flex flex-col border border-slate-200/50">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeIndex}
-                  initial={
-                    shouldReduceMotion ? false : { opacity: 0, x: 24, scale: 0.98 }
-                  }
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: -24, scale: 0.98 }}
-                  transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
-                  className="h-full w-full"
-                >
-                  <ActiveSceneComponent
-                    t={t}
-                    reducedMotion={shouldReduceMotion}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+              {/* Pantalla blanca del celular con esquinas redondeadas y escena activa */}
+              <div className="relative flex-1 w-full rounded-[2.25rem] bg-white overflow-hidden p-2 flex flex-col border border-slate-200/50">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={
+                      shouldReduceMotion ? false : { opacity: 0, x: 24, scale: 0.98 }
+                    }
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -24, scale: 0.98 }}
+                    transition={{ duration: 0.42, ease: EASE_SMOOTH }}
+                    className="h-full w-full"
+                  >
+                    <ActiveSceneComponent
+                      t={t}
+                      reducedMotion={shouldReduceMotion}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
 
-            {/* Barra inferior del marco */}
-            <div className="w-28 h-1 bg-slate-700 rounded-full mx-auto mt-1 shrink-0" />
-          </motion.div>
+              {/* Barra inferior del marco */}
+              <div className="w-28 h-1 bg-slate-700 rounded-full mx-auto mt-1 shrink-0" />
+            </motion.div>
+          </div>
         </div>
 
         {/* Pie informativo bajo el celular */}

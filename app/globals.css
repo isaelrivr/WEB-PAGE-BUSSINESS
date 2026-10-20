@@ -79,28 +79,28 @@ p {
 }
 
 @keyframes float1 {
-  0%, 100% { transform: translateY(-5px) rotate(-1deg); }
-  50%       { transform: translateY(5px)  rotate(1deg); }
+  0%, 100% { transform: translate3d(0, -5px, 0) rotate(-1deg); }
+  50%       { transform: translate3d(0, 5px, 0)  rotate(1deg); }
 }
 
 @keyframes float2 {
-  0%, 100% { transform: translateY(6px)  rotate(0.5deg); }
-  50%       { transform: translateY(-6px) rotate(-0.5deg); }
+  0%, 100% { transform: translate3d(0, 6px, 0)  rotate(0.5deg); }
+  50%       { transform: translate3d(0, -6px, 0) rotate(-0.5deg); }
 }
 
 @keyframes float3 {
-  0%, 100% { transform: translateY(-4px) rotate(1.5deg); }
-  50%       { transform: translateY(4px)  rotate(-1.5deg); }
+  0%, 100% { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
+  50%       { transform: translate3d(0, 4px, 0)  rotate(-1.5deg); }
 }
 
 @keyframes floatPhone {
-  0%, 100% { transform: translateY(-6px); }
-  50%       { transform: translateY(6px); }
+  0%, 100% { transform: translate3d(0, -6px, 0); }
+  50%       { transform: translate3d(0, 6px, 0); }
 }
 
 @keyframes shimmer {
-  0%   { transform: translateX(-110%) skewX(-12deg); }
-  100% { transform: translateX(260%)  skewX(-12deg); }
+  0%   { transform: translate3d(-110%, 0, 0) skewX(-12deg); }
+  100% { transform: translate3d(260%, 0, 0)  skewX(-12deg); }
 }
 
 @keyframes glowPulse {
@@ -115,8 +115,8 @@ p {
 }
 
 @keyframes scrollBounce {
-  0%, 100% { transform: translateY(0); opacity: 1; }
-  50%       { transform: translateY(6px); opacity: 0.5; }
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 1; }
+  50%       { transform: translate3d(0, 6px, 0); opacity: 0.5; }
 }
 
 @keyframes lineGrow {
@@ -147,13 +147,13 @@ p {
 .animation-delay-600  { animation-delay: 600ms; }
 .animation-delay-700  { animation-delay: 700ms; }
 
-.animate-float-1       { animation: float1 5.2s ease-in-out infinite; }
-.animate-float-2       { animation: float2 6.1s ease-in-out 0.9s infinite; }
-.animate-float-3       { animation: float3 4.6s ease-in-out 1.7s infinite; }
-.animate-float-phone   { animation: floatPhone 6.5s ease-in-out infinite; }
+.animate-float-1       { animation: float1 5.2s ease-in-out infinite; will-change: transform; backface-visibility: hidden; }
+.animate-float-2       { animation: float2 6.1s ease-in-out 0.9s infinite; will-change: transform; backface-visibility: hidden; }
+.animate-float-3       { animation: float3 4.6s ease-in-out 1.7s infinite; will-change: transform; backface-visibility: hidden; }
+.animate-float-phone   { animation: floatPhone 6.5s ease-in-out infinite; will-change: transform; backface-visibility: hidden; }
 .animate-shimmer       { animation: shimmer 3.2s ease-in-out 1.2s infinite; }
 .animate-glow-pulse    { animation: glowPulse 2.8s ease-in-out infinite; }
-.animate-scroll-bounce { animation: scrollBounce 1.4s ease-in-out infinite; }
+.animate-scroll-bounce { animation: scrollBounce 1.4s ease-in-out infinite; will-change: transform; }
 .animate-line-grow     { animation: lineGrow 0.6s var(--ease-out-expo) both; transform-origin: left; }
 .animate-spin-slow     { animation: spinSlow 8s linear infinite; }
 .animate-gradient      { background-size: 200% 200%; animation: gradientShift 5s ease infinite; }

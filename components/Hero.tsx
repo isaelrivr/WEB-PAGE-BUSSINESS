@@ -18,9 +18,19 @@ export default function Hero() {
   const isHeroInView = useInView(heroRef, { margin: "0px 0px -150px 0px" });
   const prefersReduced = useReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const isFinePointerRef = useRef(false);
+  const mouseRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      isFinePointerRef.current = window.matchMedia("(pointer: fine)").matches;
+    }
+    return () => {
+      if (mouseRafRef.current !== null) {
+        cancelAnimationFrame(mouseRafRef.current);
+      }
+    };
   }, []);
 
   const shouldReduceMotion = mounted && Boolean(prefersReduced);
@@ -49,7 +59,7 @@ export default function Hero() {
   const heroRectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
-    if (shouldReduceMotion) return;
+    if (shouldReduceMotion || !isFinePointerRef.current) return;
     const rect = e.currentTarget.getBoundingClientRect();
     heroRectRef.current = {
       left: rect.left,
@@ -60,10 +70,7 @@ export default function Hero() {
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (shouldReduceMotion) return;
-    if (typeof window !== "undefined" && !window.matchMedia("(pointer: fine)").matches) {
-      return;
-    }
+    if (shouldReduceMotion || !isFinePointerRef.current) return;
     if (!heroRectRef.current) {
       const rect = e.currentTarget.getBoundingClientRect();
       heroRectRef.current = {
@@ -74,13 +81,25 @@ export default function Hero() {
       };
     }
     const { left, top, width, height } = heroRectRef.current;
-    const x = ((e.clientX - left) / width) * 2 - 1;
-    const y = ((e.clientY - top) / height) * 2 - 1;
-    mouseX.set(x);
-    mouseY.set(y);
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
+    if (mouseRafRef.current !== null) return;
+
+    mouseRafRef.current = requestAnimationFrame(() => {
+      const x = ((clientX - left) / width) * 2 - 1;
+      const y = ((clientY - top) / height) * 2 - 1;
+      mouseX.set(x);
+      mouseY.set(y);
+      mouseRafRef.current = null;
+    });
   };
 
   const handleMouseLeave = () => {
+    if (mouseRafRef.current !== null) {
+      cancelAnimationFrame(mouseRafRef.current);
+      mouseRafRef.current = null;
+    }
     heroRectRef.current = null;
     mouseX.set(0);
     mouseY.set(0);

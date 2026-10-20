@@ -90,6 +90,7 @@ export default function Services() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeIndexRef = useRef(0);
   const prevProgressRef = useRef(0);
+  const isScrollingDownRef = useRef(true);
 
   // MotionValue estático en t=1 para modo accesible
   const staticT = useMotionValue(1);
@@ -115,6 +116,8 @@ export default function Services() {
 
   // Seguimiento del servicio activo según el scroll sin despachos redundantes
   useMotionValueEvent(smoothProgress, "change", (latest) => {
+    isScrollingDownRef.current = latest >= prevProgressRef.current;
+    prevProgressRef.current = latest;
     const nextIndex =
       latest < 0.25 ? 0 : latest < 0.53 ? 1 : latest < 0.81 ? 2 : 3;
     if (activeIndexRef.current !== nextIndex) {
@@ -489,10 +492,7 @@ export default function Services() {
                   const gradientClass = CARD_GRADIENTS[index];
 
                   // Montar escena solo en la tarjeta activa y la adyacente según dirección de scroll
-                  const isScrollingDown = smoothProgress.get() >= prevProgressRef.current;
-                  prevProgressRef.current = smoothProgress.get();
-
-                  const adjacentIndex = isScrollingDown
+                  const adjacentIndex = isScrollingDownRef.current
                     ? Math.min(activeIndex + 1, SERVICES.length - 1)
                     : Math.max(activeIndex - 1, 0);
 
@@ -508,6 +508,7 @@ export default function Services() {
                         opacity: transform.opacity,
                         zIndex: transform.zIndex,
                         transformOrigin: "top center",
+                        willChange: "transform, opacity",
                       }}
                       className={`absolute inset-0 w-full h-full rounded-[2rem] ${gradientClass} border border-indigo-100/70 shadow-lg shadow-indigo-500/5 p-5 sm:p-6 lg:p-7 flex flex-col justify-between select-none overflow-hidden`}
                     >

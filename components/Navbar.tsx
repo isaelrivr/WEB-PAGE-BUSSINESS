@@ -13,6 +13,8 @@ const NAV_LINKS = [
   { name: "Contacto", href: "/contacto" },
 ];
 
+const EASE_SMOOTH = [0.16, 1, 0.3, 1] as const;
+
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -21,7 +23,16 @@ export default function Navbar() {
     "https://wa.me/5210000000000?text=Hola,%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20para%20mi%20negocio";
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -42,8 +53,8 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className={`h-16 px-5 sm:px-6 rounded-full border shadow-lg flex items-center justify-between transition-[background-color,box-shadow,border-color] duration-300 ${
+          transition={{ duration: 0.5, ease: EASE_SMOOTH }}
+          className={`h-16 px-5 sm:px-6 rounded-full border shadow-lg flex items-center justify-between transition-[background-color,box-shadow,border-color] duration-300 will-change-transform ${
             scrolled
               ? "border-white/30 shadow-indigo-950/20 bg-[#4F46E5]/75 supports-[backdrop-filter]:bg-[#4F46E5]/55 backdrop-blur-xl"
               : "border-white/20 shadow-indigo-950/15 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/60 backdrop-blur-md"
@@ -145,8 +156,8 @@ export default function Navbar() {
               initial={{ opacity: 0, y: -12, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -12, scale: 0.97 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="md:hidden mt-2 p-5 rounded-3xl border border-white/20 shadow-xl shadow-indigo-950/20 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/90 backdrop-blur-xl"
+              transition={{ duration: 0.22, ease: EASE_SMOOTH }}
+              className="md:hidden mt-2 p-5 rounded-3xl border border-white/20 shadow-xl shadow-indigo-950/20 bg-[#4F46E5] supports-[backdrop-filter]:bg-[#4F46E5]/90 backdrop-blur-xl will-change-transform"
             >
               <div className="flex flex-col space-y-1">
                 {NAV_LINKS.map((link, idx) => (
@@ -157,7 +168,7 @@ export default function Navbar() {
                     transition={{
                       delay: idx * 0.05 + 0.05,
                       duration: 0.2,
-                      ease: [0.16, 1, 0.3, 1],
+                      ease: EASE_SMOOTH,
                     }}
                   >
                     <Link
@@ -176,7 +187,7 @@ export default function Navbar() {
                   transition={{
                     delay: NAV_LINKS.length * 0.05 + 0.08,
                     duration: 0.2,
-                    ease: [0.16, 1, 0.3, 1],
+                    ease: EASE_SMOOTH,
                   }}
                   className="pt-3 mt-1 border-t border-white/20"
                 >

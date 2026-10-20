@@ -87,7 +87,7 @@ export default function AboutUs() {
     <section
       id="nosotros"
       ref={sectionRef}
-      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-surface/40"
+      className="py-24 sm:py-32 lg:py-36 px-4 sm:px-6 lg:px-8 border-t border-border bg-surface/40 section-content-visibility"
     >
       <div className="max-w-6xl mx-auto">
         {/* Encabezado */}
