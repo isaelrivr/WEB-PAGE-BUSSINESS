@@ -6,7 +6,11 @@ import {
   motion,
   useInView,
   useReducedMotion,
+  type Variants,
 } from "motion/react";
+
+const EASE_SMOOTH = [0.16, 1, 0.3, 1] as const;
+const EASE_BOUNCE = [0.34, 1.56, 0.64, 1] as const;
 
 interface StepItem {
   number: string;
@@ -35,7 +39,7 @@ const STEPS: StepItem[] = [
   },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -45,31 +49,31 @@ const containerVariants = {
   },
 };
 
-const headingVariants = {
+const headingVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.65, ease: EASE_SMOOTH },
   },
 };
 
-const cardVariants = {
+const cardVariants: Variants = {
   hidden: { opacity: 0, y: 32, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.65, ease: EASE_SMOOTH },
   },
 };
 
-const ctaVariants = {
+const ctaVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, delay: 0.55, ease: EASE_SMOOTH },
   },
 };
 
@@ -140,7 +144,7 @@ export default function HowWeWork() {
                         y: -5,
                         boxShadow: "0 16px 40px -10px rgba(79,70,229,0.14)",
                         borderColor: "rgba(79,70,229,0.35)",
-                        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+                        transition: { duration: 0.25, ease: EASE_SMOOTH },
                       }
                 }
                 className="relative z-10 flex-1 p-7 sm:p-8 rounded-2xl bg-surface border border-border transition-[border-color] duration-300 flex flex-col justify-between"
@@ -179,7 +183,7 @@ export default function HowWeWork() {
                       transition={{
                         delay: 0.3 + index * 0.15,
                         duration: 0.4,
-                        ease: [0.34, 1.56, 0.64, 1],
+                        ease: EASE_BOUNCE,
                       }}
                       className="w-7 h-7 rounded-full bg-background border border-border shadow-xs flex items-center justify-center"
                     >
@@ -198,7 +202,7 @@ export default function HowWeWork() {
                       transition={{
                         delay: 0.3 + index * 0.15,
                         duration: 0.4,
-                        ease: [0.34, 1.56, 0.64, 1],
+                        ease: EASE_BOUNCE,
                       }}
                       className="w-7 h-7 rounded-full bg-surface border border-border flex items-center justify-center"
                     >
@@ -224,7 +228,7 @@ export default function HowWeWork() {
             rel="noopener noreferrer"
             whileHover={prefersReduced ? {} : { scale: 1.03, y: -2 }}
             whileTap={prefersReduced ? {} : { scale: 0.97 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.2, ease: EASE_SMOOTH }}
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-full text-base font-medium text-white bg-primary hover:bg-primary/90 transition-[background-color] duration-200 shadow-sm hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             aria-label="Agenda una asesoría gratis por WhatsApp (abre en una nueva pestaña)"
           >

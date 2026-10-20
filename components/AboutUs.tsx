@@ -6,7 +6,11 @@ import {
   motion,
   useInView,
   useReducedMotion,
+  type Variants,
 } from "motion/react";
+
+const EASE_SMOOTH = [0.16, 1, 0.3, 1] as const;
+const EASE_BOUNCE = [0.34, 1.56, 0.64, 1] as const;
 
 interface ValueItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -36,7 +40,7 @@ const VALUES: ValueItem[] = [
   },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
@@ -46,7 +50,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 28, scale: 0.97 },
   visible: {
     opacity: 1,
@@ -54,17 +58,17 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 0.6,
-      ease: [0.16, 1, 0.3, 1],
+      ease: EASE_SMOOTH,
     },
   },
 };
 
-const headingVariants = {
+const headingVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.65, ease: EASE_SMOOTH },
   },
 };
 
@@ -133,7 +137,7 @@ export default function AboutUs() {
                     : {
                         y: -4,
                         boxShadow: "0 12px 32px -8px rgba(79,70,229,0.12)",
-                        transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] },
+                        transition: { duration: 0.25, ease: EASE_SMOOTH },
                       }
                 }
                 className="p-6 sm:p-7 rounded-2xl bg-background border border-border shadow-xs hover:border-primary/40 transition-[border-color] duration-300 flex flex-col"
@@ -158,7 +162,7 @@ export default function AboutUs() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.65, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.65, delay: 0.45, ease: EASE_SMOOTH }}
           className="pt-10 sm:pt-12 border-t border-border/80 text-center"
         >
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10">
@@ -174,7 +178,7 @@ export default function AboutUs() {
                 transition={{
                   duration: 0.5,
                   delay: 0.5 + slot * 0.08,
-                  ease: [0.34, 1.56, 0.64, 1],
+                  ease: EASE_BOUNCE,
                 }}
                 className="flex flex-col items-center justify-center"
               >

@@ -4,21 +4,23 @@ import { useRef } from "react";
 import Link from "next/link";
 import { MessageCircle, MapPin, ArrowUpRight } from "lucide-react";
 import Logo from "@/components/Logo";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView, useReducedMotion, type Variants } from "motion/react";
 
-const containerVariants = {
+const EASE_SMOOTH = [0.16, 1, 0.3, 1] as const;
+
+const containerVariants: Variants = {
   hidden: {},
   visible: {
     transition: { staggerChildren: 0.08, delayChildren: 0.05 },
   },
 };
 
-const colVariants = {
+const colVariants: Variants = {
   hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.55, ease: EASE_SMOOTH },
   },
 };
 
